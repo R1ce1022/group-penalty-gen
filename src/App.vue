@@ -51,7 +51,7 @@ const {
   <div class="card" :class="{ 'dark-card': darkMode }">
     <!-- 标题栏 + 暗色模式开关 -->
     <div class="flex-between">
-      <h2>处罚结果生成器 V3.0.0</h2>
+      <h2>处罚结果生成器 V3.0.1</h2>
       <label class="switch-row">
         <span class="switch-label">暗色模式</span>
         <span class="switch" :class="{ active: darkMode }" @click="toggleDark">
@@ -62,7 +62,7 @@ const {
         更新历史
       </button>
     </div>
-    <p class="muted">点击上方预览框即可复制内容，复制后违规次数自动 +1</p>
+    <p class="muted">点击预览框即可复制内容，复制后违规次数自动+1</p>
 
     <div class="layout-grid">
       <!-- 左栏 -->
