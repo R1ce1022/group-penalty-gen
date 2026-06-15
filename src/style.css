@@ -515,7 +515,8 @@ html.dark body {
 /* ===== 移动端 ===== */
 @media (max-width: 768px) {
   .card {
-    padding: 12px;
+    padding: 10px;
+    padding-top: 0;
   }
   .layout-grid {
     grid-template-columns: 1fr;
@@ -527,35 +528,43 @@ html.dark body {
     right: 0;
     z-index: 100;
     background: #f7fafc;
-    padding: 10px 12px 8px;
+    padding: 6px 12px 6px;
     border-bottom: 1px solid #e2e8f0;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
   }
+  .layout-grid > div:last-child .muted { display: none; }
+  .layout-grid > div:last-child p:last-child { display: none; }
   .preview {
     font-size: 12px;
-    padding: 8px 10px;
-    min-height: 80px;
+    padding: 6px 10px;
+    min-height: 60px;
+    margin-top: 0;
   }
   .dark-card .layout-grid > div:last-child {
     background: #1e293b;
     border-top-color: #475569;
   }
   .flex-between {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: 10px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    padding-top: 8px;
   }
-  button {
+  .flex-between h2 { font-size: 16px; width: 100%; }
+  .switch-row { gap: 4px !important; }
+  .switch-label { font-size: 12px; }
+  button:not(.changelog-btn):not(.unit-btn):not(.delete-btn) {
     width: 100%;
   }
-  .ban-group {
-    flex-direction: column;
-  }
-  .ban-unit-group {
-    flex-wrap: wrap;
-  }
-  .unit-btn {
-    flex: 1;
-    text-align: center;
-  }
+  .changelog-btn { font-size: 11px; padding: 3px 8px; }
+  .ban-group { flex-direction: column; }
+  .ban-unit-group { flex-wrap: wrap; }
+  .unit-btn { flex: 1; text-align: center; }
+  hr { margin: 10px 0; }
+  .chips { gap: 5px; }
+  .chip { font-size: 13px; padding: 5px 8px; }
+  .chip-count { min-width: 16px; height: 16px; font-size: 10px; }
+  .action-row { margin-top: 8px; }
+  .modal-dialog { max-width: 100%; margin: 0 8px; max-height: 90vh; }
 }
