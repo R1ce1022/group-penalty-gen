@@ -23,12 +23,6 @@ export default defineConfig({
         orientation: 'any',
         icons: [
           {
-            src: 'icon.svg',
-            sizes: '512x512',
-            type: 'image/svg+xml',
-            purpose: 'any maskable',
-          },
-          {
             src: 'icon.png',
             sizes: '512x512',
             type: 'image/png',
