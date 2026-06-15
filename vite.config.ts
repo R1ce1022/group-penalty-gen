@@ -6,11 +6,13 @@ import vue from '@vitejs/plugin-vue'
 import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
+  base: './',
+  build: { outDir: 'docs' },
   plugins: [
     vue(),
     VitePWA({
       registerType: 'autoUpdate',
-      includeAssets: ['icon.svg'],
+      includeAssets: ['icon.svg', 'icon.png'],
       manifest: {
         name: '处罚结果生成器',
         short_name: '处罚生成器',
@@ -24,6 +26,12 @@ export default defineConfig({
             src: 'icon.svg',
             sizes: '512x512',
             type: 'image/svg+xml',
+            purpose: 'any maskable',
+          },
+          {
+            src: 'icon.png',
+            sizes: '512x512',
+            type: 'image/png',
             purpose: 'any maskable',
           },
         ],
