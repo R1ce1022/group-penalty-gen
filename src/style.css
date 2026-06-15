@@ -273,13 +273,9 @@ button.ghost {
 
 /* ===== 弹窗 ===== */
 .modal-overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.2);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 1000;
+  position: fixed; inset: 0; background: rgba(0, 0, 0, 0.2);
+  display: flex; align-items: center; justify-content: center; z-index: 1000;
+  overscroll-behavior: contain; overflow-y: auto;
 }
 .modal-dialog {
   background: #fff;

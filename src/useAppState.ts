@@ -262,6 +262,7 @@ export function useAppState() {
   // ===================== 移动端固定栏自适应间距 =====================
   const fixedColRef = ref<HTMLDivElement | null>(null)
   let resizeObserver: ResizeObserver | null = null
+  let bodyObserver: MutationObserver | null = null
   function updateCardPadding() {
     const col = fixedColRef.value
     const card = document.querySelector('.card') as HTMLElement | null
@@ -356,14 +357,28 @@ export function useAppState() {
   watch(banUnit, () => {
     if (banDuration.value > banMax.value) banDuration.value = banMax.value
   })
+  // 弹窗打开时禁止 body 滚动
+  watch([showResetConfirm, showChangelog], ([a, b]) => {
+    document.body.style.overflow = a || b ? 'hidden' : ''
+  })
 
   onMounted(() => {
     loadFromStorage()
     resizeObserver = new ResizeObserver(updateCardPadding)
     if (fixedColRef.value) resizeObserver.observe(fixedColRef.value)
     updateCardPadding()
+    // 监听所有弹窗（含子组件），打开时禁止 body 滚动
+    bodyObserver = new MutationObserver(() => {
+      document.body.style.overflow = document.querySelector('.modal-overlay')
+        ? 'hidden'
+        : ''
+    })
+    bodyObserver.observe(document.body, { childList: true, subtree: true })
   })
-  onUnmounted(() => resizeObserver?.disconnect())
+  onUnmounted(() => {
+    resizeObserver?.disconnect()
+    bodyObserver?.disconnect()
+  })
 
   // ===================== 更新历史数据 =====================
   interface ChangelogEntry {
@@ -373,38 +388,18 @@ export function useAppState() {
   }
   const changelog: ChangelogEntry[] = [
     {
+      version: 'V3.0.1',
+      date: '2026-06-15',
+      items: [
+        '尝试修复了移动端的无法复制问题',
+        '做了一些移动端适配，新增更新历史按钮',
+        '修复了一些已知问题（？）',
+      ],
+    },
+    {
       version: 'V3.0.0',
-      date: '2025-06-15',
-      items: [
-        '完整重构，拆分为组件化架构',
-        '新增自定义违规/处罚/备注提醒',
-        '新增暗色模式 + 开关控件',
-        '新增禁言时长滑轨（分钟/小时/天）',
-        '预览框高度平滑过渡动画',
-        '移动端固定预览栏 + 自适应间距',
-        'PWA 支持，可安装到安卓桌面',
-        '代码模块化，抽取 useAppState composable',
-      ],
-    },
-    {
-      version: 'V2.0.0',
-      date: '2025-05-xx',
-      items: [
-        '新增成员管理弹窗',
-        '新增违规次数自动累加',
-        '新增清空/重置按钮',
-        '新增 Toast 提示系统',
-        '数据持久化到 localStorage',
-      ],
-    },
-    {
-      version: 'V1.0.0',
-      date: '2025-04-xx',
-      items: [
-        '基础功能：选择成员、违规、处罚',
-        '生成处罚文本并复制到剪贴板',
-        '两栏布局，桌面端优先',
-      ],
+      date: '2026-06-15',
+      items: ['你别管前两个大版本到哪里去了反正这就是V3.0'],
     },
   ]
 
