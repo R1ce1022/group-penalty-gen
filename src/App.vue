@@ -57,10 +57,10 @@ const {
         <span class="switch" :class="{ active: darkMode }" @click="toggleDark">
           <span class="switch-knob"></span>
         </span>
-        <button class="changelog-btn" @click="showChangelog = true">
-          更新历史
-        </button>
       </label>
+      <button class="changelog-btn" @click="showChangelog = true">
+        更新历史
+      </button>
     </div>
     <p class="muted">点击上方预览框即可复制内容，复制后违规次数自动 +1</p>
 
