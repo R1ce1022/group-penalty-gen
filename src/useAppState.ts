@@ -223,7 +223,6 @@ export function useAppState() {
         ta.style.left = '-9999px'
         ta.style.top = '-9999px'
         document.body.appendChild(ta)
-        ta.focus()
         ta.select()
         document.execCommand('copy')
         document.body.removeChild(ta)
