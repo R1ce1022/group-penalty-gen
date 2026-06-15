@@ -242,19 +242,20 @@ async function copyResult() {
 
   const text = resultText.value
 
-  // 优先使用 Clipboard API，兜底用 execCommand
+  // 优先使用 Clipboard API，兜底用 ClipboardItem
   try {
     await navigator.clipboard.writeText(text)
   } catch {
-    // 移动端兜底方案：创建临时 textarea
-    const ta = document.createElement('textarea')
-    ta.value = text
-    ta.style.position = 'fixed'
-    ta.style.opacity = '0'
-    document.body.appendChild(ta)
-    ta.select()
-    document.execCommand('copy')
-    document.body.removeChild(ta)
+    try {
+      await navigator.clipboard.write([
+        new ClipboardItem({
+          'text/plain': new Blob([text], { type: 'text/plain' }),
+        }),
+      ])
+    } catch {
+      showToast('复制失败，请手动选择文字复制')
+      return
+    }
   }
 
   showToast('已复制到剪贴板')
