@@ -1,0 +1,1 @@
+{"name":"处罚结果生成器","short_name":"处罚生成器","description":"群管理处罚结果生成工具","start_url":"./","display":"standalone","background_color":"#f7fafc","theme_color":"#0ea5a4","lang":"en","scope":"./","orientation":"any","icons":[{"src":"icon.svg","sizes":"512x512","type":"image/svg+xml","purpose":"any maskable"}]}
