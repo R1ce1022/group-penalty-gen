@@ -211,15 +211,22 @@ export function useAppState() {
       return
     }
     const text = resultText.value
+
+    // 优先 Clipboard API，不行就用 textarea + execCommand（移动端最稳定）
     try {
       await navigator.clipboard.writeText(text)
     } catch {
       try {
-        await navigator.clipboard.write([
-          new ClipboardItem({
-            'text/plain': new Blob([text], { type: 'text/plain' }),
-          }),
-        ])
+        const ta = document.createElement('textarea')
+        ta.value = text
+        ta.style.position = 'fixed'
+        ta.style.left = '-9999px'
+        ta.style.top = '-9999px'
+        document.body.appendChild(ta)
+        ta.focus()
+        ta.select()
+        document.execCommand('copy')
+        document.body.removeChild(ta)
       } catch {
         showToast('复制失败，请手动选择文字复制')
         return
