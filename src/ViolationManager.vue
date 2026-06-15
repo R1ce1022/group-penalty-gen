@@ -1,0 +1,110 @@
+<!--
+  ViolationManager.vue — 违规管理组件
+  显示违规 chip 复选框列表，提供管理弹窗（添加/删除自定义违规）
+-->
+<script setup lang="ts">
+import { ref, computed } from 'vue'
+
+const props = defineProps<{
+  violations: {
+    id: number
+    label: string
+    checked: boolean
+    reminder?: string
+  }[]
+}>()
+const emit = defineEmits<{
+  toggle: [id: number]
+  add: [name: string, reminder: string]
+  remove: [id: number]
+}>()
+
+const showModal = ref(false)
+const inputName = ref('') // 自定义违规名称
+const inputReminder = ref('') // 自定义违规的提醒文字（可选）
+
+/** 只显示 id>=9 的违规（即自定义违规） */
+const customViolations = computed(() =>
+  props.violations.filter((v) => v.id >= 9),
+)
+
+function add() {
+  const name = inputName.value.trim()
+  if (!name) return
+  emit('add', name, inputReminder.value.trim())
+  inputName.value = ''
+  inputReminder.value = ''
+}
+function onKeydown(e: KeyboardEvent) {
+  if (e.key === 'Enter') {
+    e.preventDefault()
+    add()
+  }
+}
+</script>
+
+<template>
+  <label>违规内容（必选）</label>
+  <div class="chips">
+    <label
+      v-for="v in violations"
+      :key="v.id"
+      class="chip"
+      :class="{ checked: v.checked }"
+    >
+      <input
+        type="checkbox"
+        :checked="v.checked"
+        @change="emit('toggle', v.id)"
+      />
+      {{ v.label }}
+    </label>
+  </div>
+  <div class="chip-row">
+    <button class="ghost" @click="showModal = true">+ 管理自定义违规</button>
+  </div>
+
+  <Transition name="fade">
+    <div v-if="showModal" class="modal-overlay" @click.self="showModal = false">
+      <div class="modal-dialog">
+        <h3>管理自定义违规</h3>
+        <p class="muted">添加自定义违规，并可设置选中时自动出现的提醒内容。</p>
+        <label>违规内容</label>
+        <input
+          v-model="inputName"
+          type="text"
+          placeholder="例如：引战"
+          @keydown="onKeydown"
+        />
+        <label class="small" style="margin-top: 10px">提醒内容（可选）</label>
+        <input
+          v-model="inputReminder"
+          type="text"
+          placeholder="例如：请友善交流"
+          @keydown="onKeydown"
+        />
+        <button class="ghost" style="margin-top: 10px" @click="add">
+          添加
+        </button>
+        <label style="margin-top: 16px">已添加的自定义违规</label>
+        <div v-if="customViolations.length === 0" class="empty-hint">
+          还没有自定义违规。
+        </div>
+        <ul v-else class="modal-list">
+          <li v-for="v in customViolations" :key="v.id" class="modal-list-item">
+            <div>
+              <strong>{{ v.label }}</strong
+              ><span v-if="v.reminder" class="hint">→ {{ v.reminder }}</span>
+            </div>
+            <button class="ghost delete-btn" @click="emit('remove', v.id)">
+              删除
+            </button>
+          </li>
+        </ul>
+        <div class="action-row">
+          <button @click="showModal = false">关闭</button>
+        </div>
+      </div>
+    </div>
+  </Transition>
+</template>
