@@ -239,15 +239,28 @@ async function copyResult() {
     showToast('请选择：' + missing.join('、'))
     return
   }
+
+  const text = resultText.value
+
+  // 优先使用 Clipboard API，兜底用 execCommand
   try {
-    await navigator.clipboard.writeText(resultText.value)
-    showToast('已复制到剪贴板')
-    const m = currentMember.value
-    if (m) m.count++
-    selectedMemberId.value = null
+    await navigator.clipboard.writeText(text)
   } catch {
-    /* 静默失败 */
+    // 移动端兜底方案：创建临时 textarea
+    const ta = document.createElement('textarea')
+    ta.value = text
+    ta.style.position = 'fixed'
+    ta.style.opacity = '0'
+    document.body.appendChild(ta)
+    ta.select()
+    document.execCommand('copy')
+    document.body.removeChild(ta)
   }
+
+  showToast('已复制到剪贴板')
+  const m = currentMember.value
+  if (m) m.count++
+  selectedMemberId.value = null
 }
 
 // ===================== 清空 / 重置 =====================
