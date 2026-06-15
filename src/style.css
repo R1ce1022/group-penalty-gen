@@ -397,9 +397,25 @@ button.ghost {
   transition: transform 0.2s ease;
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
 }
-.switch.active .switch-knob {
-  transform: translateX(16px);
+.switch.active .switch-knob { transform: translateX(16px); }
+
+/* ===== 更新历史按钮 ===== */
+.changelog-btn {
+  background: transparent; color: #64748b; border: 1px solid #e2e8f0;
+  padding: 4px 10px; border-radius: 6px; font-size: 12px; font-weight: 400;
+  cursor: pointer; white-space: nowrap; transition: background .15s;
 }
+.changelog-btn:hover { background: #eef2f7; }
+.dark-card .changelog-btn { color: #94a3b8; border-color: #475569; }
+.dark-card .changelog-btn:hover { background: #334155; }
+
+/* ===== 更新历史弹窗内容 ===== */
+.changelog-version { margin-top: 14px; }
+.changelog-version + .changelog-version { padding-top: 14px; border-top: 1px solid #e6edf3; }
+.dark-card .changelog-version + .changelog-version { border-top-color: #475569; }
+.changelog-header { display: flex; align-items: baseline; gap: 8px; margin-bottom: 6px; font-size: 15px; }
+.changelog-date { font-size: 12px; color: #94a3b8; }
+.changelog-list { margin: 0; padding-left: 18px; font-size: 14px; line-height: 1.8; }
 
 /* ===== 暗色模式 ===== */
 .dark-card {
