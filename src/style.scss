@@ -1,0 +1,718 @@
+// =========================== 变量 ===========================
+$primary: #0ea5a4;
+$primary-light: #e0f2f1;
+$primary-dark: #0d9488;
+$danger: #dc2626;
+$danger-dark: #b91c1c;
+$bg: #f7fafc;
+$bg-dark: #0f172a;
+$card-bg: #fff;
+$card-bg-dark: #1e293b;
+$text: #0f172a;
+$text-light: #e2e8f0;
+$text-muted: #64748b;
+$text-muted-light: #94a3b8;
+$border: #e6edf3;
+$border-light: #e2e8f0;
+$border-dark: #475569;
+$chip-bg: #fbfdff;
+$chip-bg-dark: #334155;
+
+$radius: 12px;
+$radius-sm: 8px;
+$radius-xs: 6px;
+$radius-full: 999px;
+
+// =========================== 全局 ===========================
+:root {
+  font-family:
+    system-ui,
+    -apple-system,
+    'Segoe UI',
+    Roboto,
+    'Noto Sans SC',
+    'Hiragino Sans GB',
+    'Microsoft Yahei',
+    Arial;
+}
+
+// 选中文字颜色
+::selection {
+  background: rgba($primary, 0.2);
+}
+
+body {
+  margin: 0;
+  padding: 16px;
+  background: $bg url('./assets/BG.JPG') center / cover no-repeat fixed;
+  color: $text;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  transition: color 0.25s;
+
+  @media (max-width: 768px) {
+    padding: 10px;
+  }
+}
+
+// =========================== 卡片 ===========================
+.card {
+  background: $card-bg;
+  border-radius: $radius;
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  box-shadow:
+    0 1px 3px rgba(0, 0, 0, 0.06),
+    0 1px 2px rgba(0, 0, 0, 0.04);
+  padding: 16px;
+  max-width: 900px;
+  margin: 0 auto;
+  transition:
+    background 0.25s,
+    color 0.25s,
+    border-color 0.25s,
+    box-shadow 0.25s;
+
+  // 统一所有子元素的暗色切换过渡速度
+  * {
+    transition:
+      background 0.25s,
+      color 0.25s,
+      border-color 0.25s,
+      box-shadow 0.25s;
+  }
+}
+
+// =========================== 文字 ===========================
+h2 {
+  margin: 0 0 4px;
+}
+h3 {
+  margin: 0 0 4px;
+}
+
+.muted {
+  color: $text-muted;
+  margin: 0 0 12px;
+}
+.small {
+  font-size: 13px;
+}
+
+label {
+  display: block;
+  margin: 8px 0 6px;
+  font-weight: 600;
+}
+
+input[type='text'],
+input[type='number'],
+select,
+textarea {
+  width: 100%;
+  padding: 8px 10px;
+  border: 1px solid $border;
+  border-radius: $radius-sm;
+  font-size: 14px;
+  box-sizing: border-box;
+  outline: none;
+  transition:
+    border-color 0.15s,
+    box-shadow 0.15s;
+
+  &:focus {
+    border-color: $primary;
+    box-shadow: 0 0 0 3px rgba($primary, 0.12);
+  }
+}
+
+hr {
+  margin: 14px 0;
+  border: none;
+  border-top: 1px solid $border;
+}
+
+// =========================== Chip ===========================
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+}
+
+.chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 6px 10px;
+  border-radius: $radius-full;
+  border: 1px solid $border-light;
+  background: $chip-bg;
+  cursor: pointer;
+  font-weight: 400;
+  font-size: 14px;
+  user-select: none;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    box-shadow 0.15s;
+
+  &:hover {
+    border-color: $primary;
+  }
+
+  &.checked {
+    background: $primary-light;
+    border-color: $primary;
+  }
+
+  input {
+    margin: 0;
+  }
+}
+
+.chip-count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 4px;
+  border-radius: 9px;
+  background: $border-light;
+  font-size: 11px;
+  font-weight: 700;
+  color: #475569;
+  transition: background 0.15s;
+
+  .chip.checked & {
+    background: $primary;
+    color: #fff;
+  }
+}
+
+.empty-chip-hint {
+  color: $text-muted-light;
+  font-size: 13px;
+  padding: 6px 0;
+}
+
+.chip-row {
+  margin-top: 8px;
+  display: flex;
+  gap: 8px;
+}
+
+// =========================== 禁言滑轨 ===========================
+.ban-group {
+  flex-wrap: wrap;
+  gap: 8px;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.ban-slider-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.ban-slider {
+  flex: 1;
+  height: 6px;
+  appearance: none;
+  border-radius: 3px;
+  background: $border-light;
+  outline: none;
+  cursor: pointer;
+
+  &::-webkit-slider-thumb {
+    appearance: none;
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: $primary;
+    cursor: pointer;
+    border: none;
+    box-shadow: 0 1px 3px rgba($primary, 0.3);
+    transition: transform 0.12s;
+
+    &:active {
+      transform: scale(1.15);
+    }
+  }
+
+  &::-moz-range-thumb {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    background: $primary;
+    cursor: pointer;
+    border: none;
+  }
+}
+
+.ban-value {
+  font-size: 15px;
+  font-weight: 700;
+  color: $primary;
+  min-width: 36px;
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.ban-unit-group {
+  display: flex;
+  gap: 4px;
+}
+
+.unit-btn {
+  padding: 8px 10px;
+  border: 1px solid $border;
+  border-radius: $radius-sm;
+  font-size: 13px;
+  background: $chip-bg;
+  color: #475569;
+  cursor: pointer;
+  font-weight: 500;
+  transition:
+    background 0.15s,
+    border-color 0.15s,
+    color 0.15s;
+
+  &:hover {
+    border-color: $primary;
+  }
+
+  &.active {
+    background: $primary;
+    border-color: $primary;
+    color: #fff;
+  }
+}
+
+// =========================== 按钮 ===========================
+button {
+  background: $primary;
+  color: #fff;
+  border: none;
+  padding: 10px 14px;
+  border-radius: 10px;
+  font-weight: 600;
+  cursor: pointer;
+  font-size: 14px;
+  transition:
+    opacity 0.15s,
+    transform 0.1s;
+
+  &:hover {
+    opacity: 0.85;
+  }
+  &:active {
+    transform: scale(0.97);
+  }
+
+  &.ghost {
+    background: #eef2f7;
+    color: #071233;
+  }
+}
+
+.btn-danger {
+  background: $danger;
+  color: #fff;
+
+  &:hover {
+    opacity: 0.85;
+  }
+  &:active {
+    transform: scale(0.97);
+  }
+}
+
+.delete-btn {
+  padding: 4px 10px;
+  font-size: 12px;
+}
+
+.action-row {
+  margin-top: 12px;
+}
+
+// =========================== 布局 ===========================
+.flex-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.layout-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-top: 12px;
+}
+
+// =========================== 弹窗 ===========================
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.45);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  overscroll-behavior: contain;
+  overflow-y: auto;
+  backdrop-filter: blur(2px);
+}
+
+.modal-dialog {
+  background: $card-bg;
+  border-radius: $radius;
+  padding: 20px;
+  width: 90%;
+  max-width: 480px;
+  max-height: 80vh;
+  overflow-y: auto;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+}
+
+.modal-sm {
+  max-width: 380px;
+}
+
+// 弹窗过渡
+.fade-enter-active,
+.fade-leave-active {
+  transition:
+    opacity 0.15s ease,
+    transform 0.15s ease;
+}
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+  transform: scale(0.95) translateY(-8px);
+}
+
+.modal-list {
+  list-style: none;
+  padding: 0;
+  margin: 8px 0;
+}
+
+.modal-list-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 10px;
+  border: 1px solid $border;
+  border-radius: $radius-sm;
+  margin-bottom: 6px;
+  gap: 8px;
+}
+
+.hint {
+  font-size: 12px;
+  color: $text-muted;
+}
+
+.empty-hint {
+  color: $text-muted-light;
+  font-size: 14px;
+  padding: 12px 0;
+}
+
+// =========================== Toast ===========================
+.toast {
+  position: fixed;
+  bottom: 24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: #1e293b;
+  color: #e2e8f0;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 14px;
+  white-space: nowrap;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  z-index: 2000;
+}
+
+.toast-enter-active,
+.toast-leave-active {
+  transition:
+    opacity 0.2s ease,
+    transform 0.2s ease;
+}
+.toast-enter-from,
+.toast-leave-to {
+  opacity: 0;
+  transform: translateX(-50%) translateY(8px);
+}
+
+// =========================== 更新历史弹窗 ===========================
+.changelog-version {
+  margin-top: 14px;
+
+  + .changelog-version {
+    padding-top: 14px;
+    border-top: 1px solid $border;
+  }
+}
+
+.changelog-header {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+  margin-bottom: 6px;
+  font-size: 15px;
+}
+
+.changelog-date {
+  font-size: 12px;
+  color: $text-muted-light;
+}
+
+.changelog-list {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 14px;
+  line-height: 1.8;
+}
+
+// =========================== 暗色模式 ===========================
+.dark-card {
+  background: $card-bg-dark;
+  color: $text-light;
+
+  .muted {
+    color: $text-muted-light;
+  }
+
+  input[type='text'],
+  input[type='number'],
+  select,
+  textarea {
+    background: $chip-bg-dark;
+    border-color: $border-dark;
+    color: $text-light;
+
+    &:focus {
+      border-color: $primary-dark;
+      box-shadow: 0 0 0 3px rgba($primary-dark, 0.15);
+    }
+  }
+
+  hr {
+    border-top-color: $border-dark;
+  }
+
+  .chip {
+    background: $chip-bg-dark;
+    border-color: $border-dark;
+    color: $text-light;
+
+    &:hover {
+      border-color: $primary-dark;
+    }
+
+    &.checked {
+      background: #115e59;
+      border-color: $primary-dark;
+    }
+  }
+
+  button.ghost {
+    background: $chip-bg-dark;
+    color: $text-light;
+  }
+
+  .btn-danger {
+    background: $danger-dark;
+  }
+
+  .chip-count {
+    background: $border-dark;
+    color: $text-light;
+
+    .chip.checked & {
+      background: $primary-dark;
+      color: #fff;
+    }
+  }
+
+  .empty-chip-hint,
+  .empty-hint {
+    color: $text-muted;
+  }
+
+  .modal-dialog {
+    background: $card-bg-dark;
+    color: $text-light;
+
+    input[type='text'] {
+      background: $chip-bg-dark;
+      border-color: $border-dark;
+      color: $text-light;
+    }
+
+    button.ghost {
+      background: $chip-bg-dark;
+      color: $text-light;
+    }
+  }
+
+  .modal-list-item {
+    border-color: $border-dark;
+  }
+  .hint {
+    color: $text-muted-light;
+  }
+
+  .changelog-version + .changelog-version {
+    border-top-color: $border-dark;
+  }
+
+  .ban-slider {
+    background: $border-dark;
+  }
+  .ban-value {
+    color: #2dd4bf;
+  }
+
+  .unit-btn {
+    background: $chip-bg-dark;
+    border-color: $border-dark;
+    color: #cbd5e1;
+
+    &:hover {
+      border-color: $primary-dark;
+    }
+
+    &.active {
+      background: $primary-dark;
+      border-color: $primary-dark;
+      color: #fff;
+    }
+  }
+}
+
+// 暗色模式下背景图叠加半透明黑色遮罩
+html.dark body {
+  background:
+    linear-gradient(rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.75)),
+    url('./assets/BG.JPG') center / cover no-repeat fixed;
+}
+
+// =========================== 移动端 ===========================
+@media (max-width: 768px) {
+  .card {
+    padding: 10px;
+    padding-top: 0;
+  }
+
+  .layout-grid {
+    grid-template-columns: 1fr;
+
+    > div:last-child {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 100;
+      background: $bg;
+      padding: 6px 12px 6px;
+      border-bottom: 1px solid $border-light;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+
+      .muted,
+      p:last-child {
+        display: none;
+      }
+    }
+  }
+
+  .dark-card .layout-grid > div:last-child {
+    background: $card-bg-dark;
+    border-top-color: $border-dark;
+  }
+
+  .preview {
+    font-size: 12px;
+    padding: 6px 10px;
+    min-height: 60px;
+    margin-top: 0;
+  }
+
+  .flex-between {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px;
+    padding-top: 8px;
+
+    h2 {
+      font-size: 16px;
+      width: 100%;
+    }
+
+    > :not(h2) {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+  }
+
+  .switch-label {
+    font-size: 12px;
+  }
+
+  button:not(.changelog-btn):not(.unit-btn):not(.delete-btn) {
+    width: 100%;
+  }
+
+  .changelog-btn {
+    font-size: 11px;
+    padding: 3px 8px;
+  }
+
+  .ban-group {
+    flex-direction: column;
+  }
+  .ban-unit-group {
+    flex-wrap: wrap;
+  }
+  .unit-btn {
+    flex: 1;
+    text-align: center;
+  }
+
+  hr {
+    margin: 10px 0;
+  }
+  .chips {
+    gap: 5px;
+  }
+
+  .chip {
+    font-size: 13px;
+    padding: 5px 8px;
+  }
+
+  .chip-count {
+    min-width: 16px;
+    height: 16px;
+    font-size: 10px;
+  }
+
+  .action-row {
+    margin-top: 8px;
+  }
+
+  .modal-dialog {
+    max-width: 100%;
+    margin: 0 8px;
+    max-height: 90vh;
+  }
+}

@@ -1,6 +1,7 @@
 <!--
-  ReminderManager.vue — 备注提醒管理组件
-  显示备注提醒 chip 复选框列表，提供管理弹窗（添加/删除备注提醒）
+  ReminderManager — 备注提醒管理组件
+  显示备注提醒 chip 复选框列表，提供管理弹窗（添加/删除）。
+  勾选的提醒文本会出现在处罚结果"备注提醒"段落中。
 -->
 <script setup lang="ts">
 import { ref, computed } from 'vue'
@@ -14,17 +15,19 @@ const emit = defineEmits<{
   remove: [id: number]
 }>()
 
-const showModal = ref(false)
-const inputText = ref('')
+const showModal = ref(false)     // 管理弹窗显隐
+const inputText = ref('')        // 添加提醒的输入框
 
 const customReminders = computed(() => props.reminders)
 
+/** 添加备注提醒 */
 function add() {
   const t = inputText.value.trim()
   if (!t) return
   emit('add', t)
   inputText.value = ''
 }
+/** 回车键快速添加 */
 function onKeydown(e: KeyboardEvent) {
   if (e.key === 'Enter') {
     e.preventDefault()

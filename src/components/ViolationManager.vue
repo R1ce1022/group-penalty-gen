@@ -1,6 +1,7 @@
 <!--
-  ViolationManager.vue — 违规管理组件
-  显示违规 chip 复选框列表，提供管理弹窗（添加/删除自定义违规）
+  ViolationManager — 违规管理组件
+  显示违规 chip 复选框列表（含默认违规 + 自定义），提供管理弹窗。
+  自定义违规可附带提醒内容，勾选后自动出现在结果"提醒"段落中。
 -->
 <script setup lang="ts">
 import { ref, computed } from 'vue'
@@ -19,15 +20,16 @@ const emit = defineEmits<{
   remove: [id: number]
 }>()
 
-const showModal = ref(false)
-const inputName = ref('') // 自定义违规名称
-const inputReminder = ref('') // 自定义违规的提醒文字（可选）
+const showModal = ref(false)         // 管理弹窗显隐
+const inputName = ref('')            // 自定义违规名称
+const inputReminder = ref('')        // 自定义违规的自动提醒（可选）
 
-/** 只显示 id>=9 的违规（即自定义违规） */
+/** 只显示 id>=9 的违规（即用户自定义的违规） */
 const customViolations = computed(() =>
   props.violations.filter((v) => v.id >= 9),
 )
 
+/** 添加自定义违规，附带提醒文本 */
 function add() {
   const name = inputName.value.trim()
   if (!name) return
@@ -35,6 +37,7 @@ function add() {
   inputName.value = ''
   inputReminder.value = ''
 }
+/** 回车键快速添加 */
 function onKeydown(e: KeyboardEvent) {
   if (e.key === 'Enter') {
     e.preventDefault()

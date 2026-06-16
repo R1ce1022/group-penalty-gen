@@ -1,7 +1,7 @@
 <!--
-  PenaltyManager.vue — 处罚管理组件
-  显示处罚 chip 复选框列表 + 禁言时长滑轨 + 单位按钮
-  提供管理弹窗（添加/删除自定义处罚）
+  PenaltyManager — 处罚管理组件
+  显示处罚 chip 复选框列表（含默认处罚 + 自定义）+ 禁言时长滑轨。
+  勾选了含"禁言"的处罚项时显示滑轨，可拖动调整时长和单位。
 -->
 <script setup lang="ts">
 import { ref, computed } from 'vue'
@@ -20,21 +20,24 @@ const emit = defineEmits<{
   'update:banUnit': [v: string]
 }>()
 
-const showModal = ref(false)
-const inputName = ref('')
+const showModal = ref(false)     // 管理弹窗显隐
+const inputName = ref('')        // 自定义处罚名称
 
+/** 只显示 id>=9 的处罚（即用户自定义的处罚） */
 const customPenalties = computed(() => props.penalties.filter((p) => p.id >= 9))
-/** 是否勾选了包含"禁言"的处罚（控制滑轨显示/隐藏） */
+/** 是否有勾选了含"禁言"的处罚项，控制滑轨显示 */
 const hasBan = computed(() =>
   props.penalties.some((p) => p.checked && p.label.includes('禁言')),
 )
 
+/** 添加自定义处罚 */
 function add() {
   const name = inputName.value.trim()
   if (!name) return
   emit('add', name)
   inputName.value = ''
 }
+/** 回车键快速添加 */
 function onKeydown(e: KeyboardEvent) {
   if (e.key === 'Enter') {
     e.preventDefault()

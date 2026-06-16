@@ -1,49 +1,29 @@
 <!--
-  App.vue — 主组件（编排层）
-  所有状态和逻辑从 useAppState composable 引入
-  模板负责布局和数据绑定
+  App.vue — 根组件
+  编排布局，从 useAppState 获取所有状态和方法，通过 props/events 分发给子组件。
 -->
 <script setup lang="ts">
-import MemberManager from './MemberManager.vue'
-import ViolationManager from './ViolationManager.vue'
-import PenaltyManager from './PenaltyManager.vue'
-import ReminderManager from './ReminderManager.vue'
-import ResultPreview from './ResultPreview.vue'
-import { useAppState } from './useAppState'
+import MemberManager from './components/MemberManager.vue'
+import ViolationManager from './components/ViolationManager.vue'
+import PenaltyManager from './components/PenaltyManager.vue'
+import ReminderManager from './components/ReminderManager.vue'
+import ResultPreview from './components/ResultPreview.vue'
+import ResetConfirmModal from './components/ResetConfirmModal.vue'
+import ChangelogModal from './components/ChangelogModal.vue'
+import { useAppState } from './composables/useAppState'
 
 const {
-  members,
-  violations,
-  penalties,
-  reminders,
-  selectedMemberId,
-  banDuration,
-  banUnit,
-  darkMode,
-  toastMsg,
-  toastShow,
-  showResetConfirm,
-  showChangelog,
-  banMax,
-  resultText,
-  selectMember,
-  addMember,
-  removeMember,
-  toggleViolation,
-  addViolation,
-  removeViolation,
-  togglePenalty,
-  addPenalty,
-  removePenalty,
-  toggleReminder,
-  addReminder,
-  removeReminder,
-  copyResult,
-  clearAll,
-  resetAll,
-  toggleDark,
-  fixedColRef,
-  changelog,
+  members, violations, penalties, reminders,
+  selectedMemberId, banDuration, banUnit, darkMode,
+  toastMsg, toastShow,
+  showResetConfirm, showChangelog,
+  banMax, resultText,
+  selectMember, addMember, removeMember,
+  toggleViolation, addViolation, removeViolation,
+  togglePenalty, addPenalty, removePenalty,
+  toggleReminder, addReminder, removeReminder,
+  copyResult, clearAll, resetAll,
+  toggleDark, fixedColRef, changelog,
 } = useAppState()
 </script>
 
@@ -65,7 +45,7 @@ const {
     <p class="muted">点击预览框即可复制内容，复制后违规次数自动+1</p>
 
     <div class="layout-grid">
-      <!-- 左栏 -->
+      <!-- 左栏：成员 + 违规 + 处罚 + 备注 + 操作按钮 -->
       <div>
         <MemberManager
           :members="members"
@@ -101,17 +81,13 @@ const {
         />
         <div class="action-row" style="display: flex; gap: 8px">
           <button @click="clearAll" class="ghost" style="flex: 1">清空</button>
-          <button
-            @click="showResetConfirm = true"
-            class="btn-danger"
-            style="flex: 1"
-          >
+          <button @click="showResetConfirm = true" class="btn-danger" style="flex: 1">
             重置所有
           </button>
         </div>
       </div>
 
-      <!-- 右栏 -->
+      <!-- 右栏：结果预览 + toast -->
       <div ref="fixedColRef">
         <ResultPreview :result-text="resultText" @copy="copyResult" />
         <Transition name="toast">
@@ -120,61 +96,91 @@ const {
       </div>
     </div>
 
-    <!-- 重置确认弹窗 -->
-    <Transition name="fade">
-      <div
-        v-if="showResetConfirm"
-        class="modal-overlay"
-        @click.self="showResetConfirm = false"
-      >
-        <div class="modal-dialog modal-sm">
-          <h3>确认重置</h3>
-          <p class="muted">
-            重置将清除所有自定义内容（成员、自定义违规、自定义处罚、备注提醒等），此操作不可恢复。确定要重置吗？
-          </p>
-          <div style="display: flex; gap: 8px; margin-top: 16px">
-            <button
-              class="ghost"
-              style="flex: 1"
-              @click="showResetConfirm = false"
-            >
-              取消
-            </button>
-            <button class="btn-danger" style="flex: 1" @click="resetAll">
-              确认重置
-            </button>
-          </div>
-        </div>
-      </div>
-    </Transition>
-
-    <!-- 更新历史弹窗 -->
-    <Transition name="fade">
-      <div
-        v-if="showChangelog"
-        class="modal-overlay"
-        @click.self="showChangelog = false"
-      >
-        <div class="modal-dialog">
-          <h3>更新历史</h3>
-          <div
-            v-for="v in changelog"
-            :key="v.version"
-            class="changelog-version"
-          >
-            <div class="changelog-header">
-              <strong>{{ v.version }}</strong>
-              <span class="changelog-date">{{ v.date }}</span>
-            </div>
-            <ul class="changelog-list">
-              <li v-for="(item, i) in v.items" :key="i">{{ item }}</li>
-            </ul>
-          </div>
-          <div class="action-row">
-            <button @click="showChangelog = false">关闭</button>
-          </div>
-        </div>
-      </div>
-    </Transition>
+    <!-- 弹窗 -->
+    <ResetConfirmModal
+      :show="showResetConfirm"
+      @confirm="resetAll"
+      @cancel="showResetConfirm = false"
+    />
+    <ChangelogModal
+      :show="showChangelog"
+      :changelog="changelog"
+      @close="showChangelog = false"
+    />
   </div>
 </template>
+
+<style scoped>
+.switch-row {
+  display: flex !important;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  margin: 0 !important;
+  font-weight: 400 !important;
+}
+.switch-label {
+  font-size: 13px;
+  color: #64748b;
+  user-select: none;
+}
+.switch {
+  position: relative;
+  width: 36px;
+  height: 20px;
+  border-radius: 10px;
+  background: #cbd5e1;
+  transition: background 0.2s ease;
+  flex-shrink: 0;
+}
+.switch.active {
+  background: #0ea5a4;
+}
+.switch-knob {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: #fff;
+  transition: transform 0.2s ease;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2);
+}
+.switch.active .switch-knob {
+  transform: translateX(16px);
+}
+
+.changelog-btn {
+  background: transparent;
+  color: #64748b;
+  border: 1px solid #e2e8f0;
+  padding: 4px 10px;
+  border-radius: 6px;
+  font-size: 12px;
+  font-weight: 400;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.15s;
+}
+.changelog-btn:hover {
+  background: #eef2f7;
+}
+:global(.dark-card) .changelog-btn {
+  color: #94a3b8;
+  border-color: #475569;
+}
+:global(.dark-card) .changelog-btn:hover {
+  background: #334155;
+}
+
+:global(.dark-card) .switch-label {
+  color: #94a3b8;
+}
+:global(.dark-card) .switch {
+  background: #475569;
+}
+:global(.dark-card) .switch.active {
+  background: #0d9488;
+}
+</style>

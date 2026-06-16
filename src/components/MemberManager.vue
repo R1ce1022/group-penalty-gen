@@ -1,33 +1,32 @@
 <!--
-  MemberManager.vue — 成员管理组件
-  显示成员 chip 列表（点击选中/取消），提供管理弹窗（添加/删除成员）
+  MemberManager — 成员管理组件
+  显示成员 chip 列表（点击选中/取消），提供管理弹窗（添加/删除成员）。
+  选中成员后用于生成 @ 提及，违规次数显示在 chip 右侧。
 -->
 <script setup lang="ts">
 import { ref } from 'vue'
 
-// props: members=成员列表, selectedMemberId=当前选中的成员 ID
 defineProps<{
   members: { id: number; label: string; count: number }[]
   selectedMemberId: number | null
 }>()
-// emit: select=选中成员, add=添加成员, remove=删除成员
 const emit = defineEmits<{
   select: [id: number]
   add: [name: string]
   remove: [id: number]
 }>()
 
-const showModal = ref(false) // 弹窗显示控制
-const inputName = ref('') // 输入框内容
+const showModal = ref(false)    // 管理弹窗显隐
+const inputName = ref('')       // 添加成员的输入框
 
-/** 执行添加成员，通过 emit 通知父组件 */
+/** 添加成员，自动过滤空输入 */
 function add() {
   const name = inputName.value.trim()
   if (!name) return
   emit('add', name)
   inputName.value = ''
 }
-/** 回车键触发添加 */
+/** 回车键快速添加 */
 function onKeydown(e: KeyboardEvent) {
   if (e.key === 'Enter') {
     e.preventDefault()
@@ -39,7 +38,6 @@ function onKeydown(e: KeyboardEvent) {
 <template>
   <label>@ 提及成员</label>
   <div class="chips">
-    <!-- 成员 chip：点击切换选中状态，右侧显示违规次数 -->
     <span
       v-for="m in members"
       :key="m.id"
@@ -58,7 +56,6 @@ function onKeydown(e: KeyboardEvent) {
     <button class="ghost" @click="showModal = true">+ 管理成员</button>
   </div>
 
-  <!-- 管理弹窗 -->
   <Transition name="fade">
     <div v-if="showModal" class="modal-overlay" @click.self="showModal = false">
       <div class="modal-dialog">
