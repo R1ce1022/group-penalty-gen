@@ -9,7 +9,13 @@
   对外暴露统一的接口，App.vue 只需解构使用。
 */
 import { ref, watch, onMounted, onUnmounted } from 'vue'
-import type { ChangelogEntry, StoredData, Violation, Penalty, Reminder } from '../types'
+import type {
+  ChangelogEntry,
+  StoredData,
+  Violation,
+  Penalty,
+  Reminder,
+} from '../types'
 import { useMembers } from './useMembers'
 import { useViolations } from './useViolations'
 import { usePenalties } from './usePenalties'
@@ -21,23 +27,51 @@ import { useDarkMode } from './useDarkMode'
 export function useAppState() {
   // ===================== 组合领域状态 =====================
   const {
-    members, selectedMemberId, currentMember, nextMemberId,
-    selectMember, addMember, removeMember, clearSelection, resetMembers,
+    members,
+    selectedMemberId,
+    currentMember,
+    nextMemberId,
+    selectMember,
+    addMember,
+    removeMember,
+    clearSelection,
+    resetMembers,
   } = useMembers()
 
   const {
-    violations, nextViolationId, selectedViolations, autoReminder,
-    toggleViolation, addViolation, removeViolation, resetViolations, clearViolationChecks,
+    violations,
+    nextViolationId,
+    selectedViolations,
+    autoReminder,
+    toggleViolation,
+    addViolation,
+    removeViolation,
+    resetViolations,
+    clearViolationChecks,
   } = useViolations()
 
   const {
-    penalties, nextPenaltyId, banDuration, banUnit, banMax,
-    togglePenalty, addPenalty, removePenalty, resetPenalties, clearPenaltyChecks,
+    penalties,
+    nextPenaltyId,
+    banDuration,
+    banUnit,
+    banMax,
+    togglePenalty,
+    addPenalty,
+    removePenalty,
+    resetPenalties,
+    clearPenaltyChecks,
   } = usePenalties()
 
   const {
-    reminders, nextReminderId, selectedReminders,
-    toggleReminder, addReminder, removeReminder, resetReminders, clearReminderSelections,
+    reminders,
+    nextReminderId,
+    selectedReminders,
+    toggleReminder,
+    addReminder,
+    removeReminder,
+    resetReminders,
+    clearReminderSelections,
   } = useReminders()
 
   const { toastMsg, toastShow, showToast } = useToast()
@@ -45,7 +79,13 @@ export function useAppState() {
 
   // ===================== 结果文本计算 =====================
   const { resultText } = useResult(
-    currentMember, selectedViolations, penalties, banDuration, banUnit, autoReminder, selectedReminders,
+    currentMember,
+    selectedViolations,
+    penalties,
+    banDuration,
+    banUnit,
+    autoReminder,
+    selectedReminders,
   )
 
   // ===================== 弹窗显隐状态 =====================
@@ -145,7 +185,9 @@ export function useAppState() {
   /** 从 localStorage 恢复数据（合并默认值 + 自定义数据） */
   function loadFromStorage() {
     try {
-      const data: StoredData = JSON.parse(localStorage.getItem(STORAGE_KEY) || '')
+      const data: StoredData = JSON.parse(
+        localStorage.getItem(STORAGE_KEY) || '',
+      )
       members.value = data.members || []
 
       const defV = [
@@ -160,7 +202,9 @@ export function useAppState() {
       ]
       violations.value = [
         ...defV,
-        ...(data.violations || []).filter((v: Violation) => v.id >= 9).map((v: Violation) => ({ ...v, checked: false })),
+        ...(data.violations || [])
+          .filter((v: Violation) => v.id >= 9)
+          .map((v: Violation) => ({ ...v, checked: false })),
       ]
 
       const defP = [
@@ -169,10 +213,15 @@ export function useAppState() {
       ]
       penalties.value = [
         ...defP,
-        ...(data.penalties || []).filter((p: Penalty) => p.id >= 9).map((p: Penalty) => ({ ...p, checked: false })),
+        ...(data.penalties || [])
+          .filter((p: Penalty) => p.id >= 9)
+          .map((p: Penalty) => ({ ...p, checked: false })),
       ]
 
-      reminders.value = (data.reminders || []).map((r: Reminder) => ({ ...r, selected: false }))
+      reminders.value = (data.reminders || []).map((r: Reminder) => ({
+        ...r,
+        selected: false,
+      }))
       selectedMemberId.value = null
       nextMemberId.value = data.nextMemberId || 1
       nextViolationId.value = data.nextViolationId || 9
@@ -184,7 +233,9 @@ export function useAppState() {
         darkMode.value = true
         initDarkFromStorage()
       }
-    } catch { /* 首次使用或数据损坏，静默忽略 */ }
+    } catch {
+      /* 首次使用或数据损坏，静默忽略 */
+    }
   }
 
   /** 自动监听状态变化，实时持久化 */
@@ -226,7 +277,9 @@ export function useAppState() {
     updateCardPadding()
     // 监听弹窗 DOM 变化，锁定 body 滚动
     bodyObserver = new MutationObserver(() => {
-      document.body.style.overflow = document.querySelector('.modal-overlay') ? 'hidden' : ''
+      document.body.style.overflow = document.querySelector('.modal-overlay')
+        ? 'hidden'
+        : ''
     })
     bodyObserver.observe(document.body, { childList: true, subtree: true })
   })
@@ -238,6 +291,15 @@ export function useAppState() {
 
   // ===================== 更新历史数据 =====================
   const changelog: ChangelogEntry[] = [
+    {
+      version: 'V3.0.2',
+      date: '2026-06-16',
+      items: [
+        '把主题色改成了瓦尔基里紫,目前只改了些控件以后会更好',
+        '对UI做了些小巧思调整',
+        '这么大一个背景图你不会看不到吧',
+      ],
+    },
     {
       version: 'V3.0.1',
       date: '2026-06-15',
@@ -255,16 +317,38 @@ export function useAppState() {
   ]
 
   return {
-    members, violations, penalties, reminders,
-    selectedMemberId, banDuration, banUnit, darkMode,
-    toastMsg, toastShow,
-    showResetConfirm, showChangelog,
-    currentMember, banMax, resultText,
-    selectMember, addMember, removeMember,
-    toggleViolation, addViolation, removeViolation,
-    togglePenalty, addPenalty, removePenalty,
-    toggleReminder, addReminder, removeReminder,
-    copyResult, clearAll, resetAll,
-    toggleDark, fixedColRef, changelog,
+    members,
+    violations,
+    penalties,
+    reminders,
+    selectedMemberId,
+    banDuration,
+    banUnit,
+    darkMode,
+    toastMsg,
+    toastShow,
+    showResetConfirm,
+    showChangelog,
+    currentMember,
+    banMax,
+    resultText,
+    selectMember,
+    addMember,
+    removeMember,
+    toggleViolation,
+    addViolation,
+    removeViolation,
+    togglePenalty,
+    addPenalty,
+    removePenalty,
+    toggleReminder,
+    addReminder,
+    removeReminder,
+    copyResult,
+    clearAll,
+    resetAll,
+    toggleDark,
+    fixedColRef,
+    changelog,
   }
 }
