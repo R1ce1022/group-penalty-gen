@@ -19,8 +19,12 @@ const emit = defineEmits<{
           重置将清除所有自定义内容（成员、自定义违规、自定义处罚、备注提醒等），此操作不可恢复。确定要重置吗？
         </p>
         <div style="display: flex; gap: 8px; margin-top: 16px">
-          <button class="ghost" style="flex: 1" @click="emit('cancel')">取消</button>
-          <button class="btn-danger" style="flex: 1" @click="emit('confirm')">确认重置</button>
+          <button class="ghost" style="flex: 1" @click="emit('cancel')">
+            取消
+          </button>
+          <button class="btn-danger" style="flex: 1" @click="emit('confirm')">
+            确认重置
+          </button>
         </div>
       </div>
     </div>

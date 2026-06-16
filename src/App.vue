@@ -13,17 +13,38 @@ import ChangelogModal from './components/ChangelogModal.vue'
 import { useAppState } from './composables/useAppState'
 
 const {
-  members, violations, penalties, reminders,
-  selectedMemberId, banDuration, banUnit, darkMode,
-  toastMsg, toastShow,
-  showResetConfirm, showChangelog,
-  banMax, resultText,
-  selectMember, addMember, removeMember,
-  toggleViolation, addViolation, removeViolation,
-  togglePenalty, addPenalty, removePenalty,
-  toggleReminder, addReminder, removeReminder,
-  copyResult, clearAll, resetAll,
-  toggleDark, fixedColRef, changelog,
+  members,
+  violations,
+  penalties,
+  reminders,
+  selectedMemberId,
+  banDuration,
+  banUnit,
+  darkMode,
+  toastMsg,
+  toastShow,
+  showResetConfirm,
+  showChangelog,
+  banMax,
+  resultText,
+  selectMember,
+  addMember,
+  removeMember,
+  toggleViolation,
+  addViolation,
+  removeViolation,
+  togglePenalty,
+  addPenalty,
+  removePenalty,
+  toggleReminder,
+  addReminder,
+  removeReminder,
+  copyResult,
+  clearAll,
+  resetAll,
+  toggleDark,
+  fixedColRef,
+  changelog,
 } = useAppState()
 </script>
 
@@ -81,7 +102,11 @@ const {
         />
         <div class="action-row" style="display: flex; gap: 8px">
           <button @click="clearAll" class="ghost" style="flex: 1">清空</button>
-          <button @click="showResetConfirm = true" class="btn-danger" style="flex: 1">
+          <button
+            @click="showResetConfirm = true"
+            class="btn-danger"
+            style="flex: 1"
+          >
             重置所有
           </button>
         </div>
