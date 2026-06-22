@@ -52,24 +52,45 @@ onMounted(() => {
 
 <style scoped>
 .preview {
+  position: relative;
   white-space: pre-wrap;
-  background: #0b1220;
-  color: #e6f6f6;
-  padding: 12px;
-  border-radius: 8px;
-  margin-top: 12px;
+  background: var(--color-cyan-white);
+  color: var(--color-text);
+  padding: 14px 12px 12px;
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  margin-top: var(--space-md);
   min-height: 120px;
   cursor: pointer;
   overflow: hidden;
+  font-family: 'JetBrains Mono', 'Cascadia Code', 'Consolas', 'Microsoft Yahei',
+    monospace;
+  font-size: var(--font-size-base);
+  line-height: 1.6;
+  box-shadow: var(--shadow-sm);
+  box-sizing: border-box;
   transition:
     height 0.25s ease,
-    background 0.15s;
-  box-sizing: border-box;
+    background 0.15s,
+    border-color 0.15s,
+    box-shadow 0.15s;
+}
+/* 顶部渐变条，标识输出区 */
+.preview::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--gradient-primary);
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
 }
 .preview:hover {
-  background: #141f33;
+  border-color: var(--color-primary-light);
+  box-shadow: var(--shadow-md), var(--shadow-glow);
 }
 .preview:active {
-  background: #1a2840;
+  border-color: var(--color-primary);
 }
 </style>

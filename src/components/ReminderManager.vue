@@ -42,7 +42,7 @@ function onKeydown(e: KeyboardEvent) {
     <label
       v-for="r in reminders"
       :key="r.id"
-      class="chip"
+      class="chip chip-reminder"
       :class="{ checked: r.selected }"
     >
       <input

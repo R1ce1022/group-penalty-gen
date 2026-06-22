@@ -55,7 +55,7 @@ function onKeydown(e: KeyboardEvent) {
     <label
       v-for="p in penalties"
       :key="p.id"
-      class="chip"
+      class="chip chip-update"
       :class="{ checked: p.checked }"
     >
       <input

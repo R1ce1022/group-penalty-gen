@@ -53,7 +53,7 @@ function onKeydown(e: KeyboardEvent) {
     <label
       v-for="v in violations"
       :key="v.id"
-      class="chip"
+      class="chip chip-important"
       :class="{ checked: v.checked }"
     >
       <input

@@ -6,14 +6,21 @@
     <title>处罚结果生成器</title>
     <link rel="icon" href="/icon.png" />
     <script>
+      // 防闪烁：在 Vue 挂载前根据 localStorage 提前设置 data-theme
       try {
         var d = JSON.parse(localStorage.getItem('punishment-data-v3'))
-        if (d && d.darkMode) document.documentElement.classList.add('dark')
-      } catch (e) {}
+        var theme = d && d.darkMode ? 'dark' : 'light'
+        document.documentElement.setAttribute('data-theme', theme)
+      } catch (e) {
+        document.documentElement.setAttribute('data-theme', 'light')
+      }
     </script>
     <style>
-      html.dark body {
+      [data-theme='dark'] body {
         background: #0f172a;
+      }
+      body {
+        background: #f5f7fa;
       }
     </style>
   </head>

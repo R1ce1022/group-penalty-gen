@@ -1,30 +1,13 @@
-// =========================== 变量 ===========================
-$primary: #7b54f8;
-$primary-light: #eee5ff;
-$primary-dark: #5f3ad8;
-$danger: #dc2626;
-$danger-dark: #b91c1c;
-$bg: #f7fafc;
-$bg-dark: #0f172a;
-$card-bg: #fff;
-$card-bg-dark: #1e293b;
-$text: #0f172a;
-$text-light: #e2e8f0;
-$text-muted: #64748b;
-$text-muted-light: #94a3b8;
-$border: #e6edf3;
-$border-light: #e2e8f0;
-$border-dark: #475569;
-$chip-bg: #fbfdff;
-$chip-bg-dark: #334155;
+// ============================================================
+// style.scss — 全局样式（中务桐乃主题）
+// 设计来源：PRD.md（蔚蓝档案·中务桐乃配色规范），清新/科技/活力/专业。
+// 采用 CSS 自定义属性（design token）替代早期 SCSS 编译期变量，
+// 暗色模式通过 <html data-theme="dark"> 切换变量，无需 .dark-card 嵌套覆盖。
+// ============================================================
 
-$radius: 12px;
-$radius-sm: 8px;
-$radius-xs: 6px;
-$radius-full: 999px;
-
-// =========================== 全局 ===========================
+// =========================== Token ===========================
 :root {
+  // 字体
   font-family:
     system-ui,
     -apple-system,
@@ -34,18 +17,175 @@ $radius-full: 999px;
     'Hiragino Sans GB',
     'Microsoft Yahei',
     Arial;
+
+  // —— 主色 Primary ——
+  --color-primary: #7a6df1;
+  --color-primary-light: #b9adf7;
+  --color-primary-hover: #6b5ee8;
+  --color-primary-active: #5f50d9;
+  --color-cyan: #9eddf6;
+  --color-navy: #323859;
+
+  // —— 辅助色 Secondary ——
+  --color-warm-yellow: #ffd68a;
+  --color-soft-pink: #ffb4cf;
+  --color-blue-purple: #a8b7ff;
+  --color-cyan-white: #e6f7fa;
+
+  // —— 中性色 Neutral（亮色） ——
+  --color-text: #1a1f2e;
+  --color-text-secondary: #3b4252;
+  --color-text-muted: #5c6373;
+  --color-text-placeholder: #a0a6b3;
+  --color-border: #d8dee9;
+  --color-bg-base: #f5f7fa;
+  --color-bg-card: #ffffff;
+  --color-bg-subtle: #f2f4f8;
+  --color-bg-input: #ffffff;
+
+  // —— 语义色 Semantic ——
+  --color-success: #22c55e;
+  --color-warning: #f59e0b;
+  --color-danger: #ef4444;
+  --color-cancelled: #a0a6b3;
+
+  // —— Chip 四类分类色（PRD 活动/重要/更新 + 备注扩展） ——
+  --chip-active-bg: #eee9fe;
+  --chip-active-border: #b9adf7;
+  --chip-active-text: #5b4fd1;
+
+  --chip-important-bg: #7a6df1;
+  --chip-important-border: #7a6df1;
+  --chip-important-text: #ffffff;
+
+  --chip-update-bg: #e6f7fa;
+  --chip-update-border: #9eddf6;
+  --chip-update-text: #2b7a9e;
+
+  --chip-reminder-bg: #fff0f6;
+  --chip-reminder-border: #ffb4cf;
+  --chip-reminder-text: #b8567e;
+
+  // —— 间距 Spacing ——
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 12px;
+  --space-lg: 16px;
+  --space-xl: 24px;
+  --space-2xl: 32px;
+
+  // —— 字号 Font size ——
+  --font-size-xs: 11px;
+  --font-size-sm: 12px;
+  --font-size-base: 14px;
+  --font-size-md: 15px;
+  --font-size-lg: 16px;
+  --font-size-xl: 20px;
+  --font-size-2xl: 24px;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-semibold: 600;
+  --font-weight-bold: 700;
+
+  // —— 圆角 Radius ——
+  --radius-xs: 6px;
+  --radius-sm: 8px;
+  --radius-md: 12px;
+  --radius-lg: 16px;
+  --radius-full: 999px;
+
+  // —— 阴影 Shadow ——
+  --shadow-sm: 0 1px 2px rgba(50, 56, 89, 0.06), 0 1px 3px rgba(50, 56, 89, 0.04);
+  --shadow-md: 0 4px 12px rgba(50, 56, 89, 0.08), 0 2px 4px rgba(50, 56, 89, 0.04);
+  --shadow-lg: 0 12px 32px rgba(50, 56, 89, 0.12), 0 4px 8px rgba(50, 56, 89, 0.06);
+  --shadow-glow: 0 0 24px rgba(122, 109, 241, 0.25);
+  --shadow-focus: 0 0 0 3px rgba(122, 109, 241, 0.15);
+
+  // —— 渐变 Gradient ——
+  --gradient-primary: linear-gradient(135deg, #7a6df1 0%, #b9adf7 100%);
+  --gradient-secondary: linear-gradient(135deg, #9eddf6 0%, #a8b7ff 100%);
+  --gradient-header: linear-gradient(135deg, #7a6df1 0%, #9eddf6 100%);
+
+  // —— 背景：桐乃主题渐变（亮色淡紫青柔和过渡） ——
+  --bg-base-gradient: linear-gradient(
+    135deg,
+    #f5f7fa 0%,
+    #eee9fe 45%,
+    #e6f7fa 100%
+  );
+  --bg-glow: rgba(122, 109, 241, 0.18);
+
+  // —— 卡片底色（默认不透明，可被暗色覆盖） ——
+  --card-surface: rgba(255, 255, 255, 0.92);
 }
 
-// 选中文字颜色
+// =========================== 暗色 Token 覆盖 ===========================
+[data-theme='dark'] {
+  --color-text: #e2e8f0;
+  --color-text-secondary: #cbd5e1;
+  --color-text-muted: #94a3b8;
+  --color-text-placeholder: #64748b;
+  --color-border: #3b4252;
+  --color-bg-base: #0f172a;
+  --color-bg-card: #1e293b;
+  --color-bg-subtle: #334155;
+  --color-bg-input: #334155;
+
+  --color-primary-hover: #8b7ff5;
+  --color-primary-active: #7a6df1;
+
+  --color-danger: #dc2626;
+
+  // Chip 暗色分类色
+  --chip-active-bg: rgba(122, 109, 241, 0.18);
+  --chip-active-border: #7a6df1;
+  --chip-active-text: #b9adf7;
+
+  --chip-important-bg: #5f50d9;
+  --chip-important-border: #5f50d9;
+
+  --chip-update-bg: rgba(158, 221, 246, 0.15);
+  --chip-update-border: #5b9eb8;
+  --chip-update-text: #9eddf6;
+
+  --chip-reminder-bg: rgba(255, 180, 207, 0.15);
+  --chip-reminder-border: #c97a9e;
+  --chip-reminder-text: #ffb4cf;
+
+  // 阴影暗色化
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.3), 0 1px 3px rgba(0, 0, 0, 0.2);
+  --shadow-md: 0 4px 12px rgba(0, 0, 0, 0.35), 0 2px 4px rgba(0, 0, 0, 0.2);
+  --shadow-lg: 0 12px 32px rgba(0, 0, 0, 0.45), 0 4px 8px rgba(0, 0, 0, 0.25);
+  --shadow-glow: 0 0 24px rgba(122, 109, 241, 0.35);
+  --shadow-focus: 0 0 0 3px rgba(122, 109, 241, 0.25);
+
+  // 背景暗色：深紫蓝渐变
+  --bg-base-gradient: linear-gradient(
+    135deg,
+    #0f172a 0%,
+    #1e1b4b 50%,
+    #0f172a 100%
+  );
+  --bg-glow: rgba(122, 109, 241, 0.12);
+
+  --card-surface: rgba(30, 41, 59, 0.92);
+}
+
+// =========================== 全局 ===========================
 ::selection {
-  background: rgba($primary, 0.2);
+  background: rgba(122, 109, 241, 0.2);
+  color: inherit;
 }
 
 body {
   margin: 0;
-  padding: 16px;
-  background: $bg url('./assets/BG.JPG') center / cover no-repeat fixed;
-  color: $text;
+  padding: var(--space-lg);
+  // 桐乃主题渐变背景 + 左上紫色光晕（替换原 BG.JPG）
+  background:
+    radial-gradient(circle at 20% 0%, var(--bg-glow) 0%, transparent 50%),
+    var(--bg-base-gradient);
+  background-attachment: fixed;
+  color: var(--color-text);
   -webkit-font-smoothing: antialiased;
   min-height: 100vh;
   transition: color 0.25s;
@@ -57,15 +197,16 @@ body {
 
 // =========================== 卡片 ===========================
 .card {
-  background: $card-bg;
-  border-radius: $radius;
-  border: 1px solid rgba(0, 0, 0, 0.04);
-  box-shadow:
-    0 1px 3px rgba(0, 0, 0, 0.06),
-    0 1px 2px rgba(0, 0, 0, 0.04);
-  padding: 16px;
+  background: var(--card-surface);
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  border-radius: var(--radius-md);
+  border: 1px solid var(--color-border);
+  box-shadow: var(--shadow-md);
+  padding: var(--space-lg);
   max-width: 900px;
   margin: 0 auto;
+  color: var(--color-text);
   transition:
     background 0.25s,
     color 0.25s,
@@ -84,92 +225,132 @@ body {
 
 // =========================== 文字 ===========================
 h2 {
-  margin: 0 0 4px;
+  margin: 0 0 var(--space-xs);
+  font-size: var(--font-size-xl);
+  font-weight: var(--font-weight-bold);
 }
 h3 {
-  margin: 0 0 4px;
+  margin: 0 0 var(--space-xs);
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text);
 }
 
 .muted {
-  color: $text-muted;
-  margin: 0 0 12px;
+  color: var(--color-text-muted);
+  margin: 0 0 var(--space-md);
+  font-size: var(--font-size-base);
 }
 .small {
-  font-size: 13px;
+  font-size: var(--font-size-sm);
 }
 
 label {
   display: block;
-  margin: 8px 0 6px;
-  font-weight: 600;
+  margin: var(--space-sm) 0 6px;
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-secondary);
 }
 
+// =========================== 输入框 ===========================
 input[type='text'],
 input[type='number'],
 select,
 textarea {
   width: 100%;
-  padding: 8px 10px;
-  border: 1px solid $border;
-  border-radius: $radius-sm;
-  font-size: 14px;
+  padding: var(--space-sm) 10px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-input);
+  color: var(--color-text);
+  font-size: var(--font-size-base);
   box-sizing: border-box;
   outline: none;
   transition:
     border-color 0.15s,
     box-shadow 0.15s;
 
+  &::placeholder {
+    color: var(--color-text-placeholder);
+  }
+
   &:focus {
-    border-color: $primary;
-    box-shadow: 0 0 0 3px rgba($primary, 0.12);
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-focus);
   }
 }
 
 hr {
   margin: 14px 0;
   border: none;
-  border-top: 1px solid $border;
+  border-top: 1px solid var(--color-border);
 }
 
 // =========================== Chip ===========================
 .chips {
   display: flex;
   flex-wrap: wrap;
-  gap: 8px;
+  gap: var(--space-sm);
   align-items: center;
 }
 
+// chip 基础样式（未选中），分类色在 .checked 态生效
 .chip {
   display: inline-flex;
   align-items: center;
-  gap: 4px;
+  gap: var(--space-xs);
   padding: 6px 10px;
-  border-radius: $radius-full;
-  border: 1px solid $border-light;
-  background: $chip-bg;
+  border-radius: var(--radius-full);
+  border: 1px solid var(--color-border);
+  background: var(--color-bg-subtle);
+  color: var(--color-text-secondary);
   cursor: pointer;
-  font-weight: 400;
-  font-size: 14px;
+  font-weight: var(--font-weight-regular);
+  font-size: var(--font-size-base);
   user-select: none;
   transition:
     background 0.15s,
     border-color 0.15s,
+    color 0.15s,
     box-shadow 0.15s;
 
   &:hover {
-    border-color: $primary;
-  }
-
-  &.checked {
-    background: $primary-light;
-    border-color: $primary;
+    border-color: var(--color-primary-light);
   }
 
   input {
     margin: 0;
+    accent-color: var(--color-primary);
   }
 }
 
+// —— 活动 chip（成员）：浅紫 ——
+.chip-active.checked {
+  background: var(--chip-active-bg);
+  border-color: var(--chip-active-border);
+  color: var(--chip-active-text);
+}
+// —— 重要 chip（违规）：深紫白字 ——
+.chip-important.checked {
+  background: var(--chip-important-bg);
+  border-color: var(--chip-important-border);
+  color: var(--chip-important-text);
+  box-shadow: 0 2px 8px rgba(122, 109, 241, 0.25);
+}
+// —— 更新 chip（处罚）：淡蓝 ——
+.chip-update.checked {
+  background: var(--chip-update-bg);
+  border-color: var(--chip-update-border);
+  color: var(--chip-update-text);
+}
+// —— 备注 chip：柔粉 ——
+.chip-reminder.checked {
+  background: var(--chip-reminder-bg);
+  border-color: var(--chip-reminder-border);
+  color: var(--chip-reminder-text);
+}
+
+// 违规次数徽标：三档语义色（0 灰 / 1-2 黄 / 3+ 红）
 .chip-count {
   display: inline-flex;
   align-items: center;
@@ -178,34 +359,40 @@ hr {
   height: 18px;
   padding: 0 4px;
   border-radius: 9px;
-  background: $border-light;
-  font-size: 11px;
-  font-weight: 700;
-  color: #475569;
+  background: var(--color-border);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  color: #fff;
   transition: background 0.15s;
 
-  .chip.checked & {
-    background: $primary;
+  // 1-2 次：暖黄提醒
+  &.count-warn {
+    background: var(--color-warning);
+    color: #fff;
+  }
+  // 3 次及以上：红色警示
+  &.count-danger {
+    background: var(--color-danger);
     color: #fff;
   }
 }
 
 .empty-chip-hint {
-  color: $text-muted-light;
-  font-size: 13px;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-sm);
   padding: 6px 0;
 }
 
 .chip-row {
-  margin-top: 8px;
+  margin-top: var(--space-sm);
   display: flex;
-  gap: 8px;
+  gap: var(--space-sm);
 }
 
 // =========================== 禁言滑轨 ===========================
 .ban-group {
   flex-wrap: wrap;
-  gap: 8px;
+  gap: var(--space-sm);
   display: flex;
   flex-direction: column;
   align-items: stretch;
@@ -221,24 +408,27 @@ hr {
   flex: 1;
   height: 6px;
   appearance: none;
+  -webkit-appearance: none;
   border-radius: 3px;
-  background: $border-light;
+  background: var(--color-bg-subtle);
   outline: none;
   cursor: pointer;
+  accent-color: var(--color-primary);
 
   &::-webkit-slider-thumb {
+    -webkit-appearance: none;
     appearance: none;
     width: 18px;
     height: 18px;
     border-radius: 50%;
-    background: $primary;
+    background: var(--gradient-primary);
     cursor: pointer;
-    border: none;
-    box-shadow: 0 1px 3px rgba($primary, 0.3);
+    border: 2px solid #fff;
+    box-shadow: var(--shadow-glow);
     transition: transform 0.12s;
 
     &:active {
-      transform: scale(1.15);
+      transform: scale(1.2);
     }
   }
 
@@ -246,84 +436,120 @@ hr {
     width: 18px;
     height: 18px;
     border-radius: 50%;
-    background: $primary;
+    background: var(--color-primary);
     cursor: pointer;
-    border: none;
+    border: 2px solid #fff;
+    box-shadow: var(--shadow-glow);
   }
 }
 
 .ban-value {
-  font-size: 15px;
-  font-weight: 700;
-  color: $primary;
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
   min-width: 36px;
   text-align: right;
   font-variant-numeric: tabular-nums;
+  // 渐变文字
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: var(--color-primary);
 }
 
 .ban-unit-group {
   display: flex;
-  gap: 4px;
+  gap: var(--space-xs);
 }
 
 .unit-btn {
-  padding: 8px 10px;
-  border: 1px solid $border;
-  border-radius: $radius-sm;
-  font-size: 13px;
-  background: $chip-bg;
-  color: #475569;
+  padding: var(--space-sm) 10px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-sm);
+  background: var(--color-bg-card);
+  color: var(--color-text-secondary);
   cursor: pointer;
-  font-weight: 500;
+  font-weight: var(--font-weight-medium);
   transition:
     background 0.15s,
     border-color 0.15s,
-    color 0.15s;
+    color 0.15s,
+    box-shadow 0.15s;
 
   &:hover {
-    border-color: $primary;
+    border-color: var(--color-primary-light);
+    color: var(--color-primary);
   }
 
   &.active {
-    background: $primary;
-    border-color: $primary;
+    background: var(--gradient-primary);
+    border-color: transparent;
     color: #fff;
+    box-shadow: 0 2px 8px rgba(122, 109, 241, 0.3);
   }
 }
 
 // =========================== 按钮 ===========================
 button {
-  background: $primary;
+  background: var(--gradient-primary);
   color: #fff;
   border: none;
   padding: 10px 14px;
-  border-radius: 10px;
-  font-weight: 600;
+  border-radius: var(--radius-sm);
+  font-weight: var(--font-weight-semibold);
   cursor: pointer;
-  font-size: 14px;
+  font-size: var(--font-size-base);
+  box-shadow: var(--shadow-sm);
   transition:
     opacity 0.15s,
-    transform 0.1s;
+    transform 0.1s,
+    box-shadow 0.15s;
 
   &:hover {
-    opacity: 0.85;
+    box-shadow: var(--shadow-md), var(--shadow-glow);
   }
   &:active {
     transform: scale(0.97);
   }
 
+  // 次按钮：白底紫边
+  &.secondary {
+    background: var(--color-bg-card);
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary);
+    box-shadow: none;
+
+    &:hover {
+      background: var(--chip-active-bg);
+      box-shadow: var(--shadow-sm);
+    }
+  }
+
+  // ghost 按钮：灰底，hover 紫边紫字
   &.ghost {
-    background: #eef2f7;
-    color: #071233;
+    background: var(--color-bg-subtle);
+    color: var(--color-text-secondary);
+    border: 1px solid var(--color-border);
+    box-shadow: none;
+
+    &:hover {
+      border-color: var(--color-primary-light);
+      color: var(--color-primary);
+      background: var(--chip-active-bg);
+      box-shadow: none;
+    }
   }
 }
 
 .btn-danger {
-  background: $danger;
+  background: var(--color-danger);
   color: #fff;
+  box-shadow: var(--shadow-sm);
 
   &:hover {
-    opacity: 0.85;
+    opacity: 0.9;
+    box-shadow: var(--shadow-md);
   }
   &:active {
     transform: scale(0.97);
@@ -331,12 +557,18 @@ button {
 }
 
 .delete-btn {
-  padding: 4px 10px;
-  font-size: 12px;
+  padding: var(--space-xs) 10px;
+  font-size: var(--font-size-sm);
+
+  &:hover {
+    background: var(--color-danger);
+    color: #fff;
+    border-color: var(--color-danger);
+  }
 }
 
 .action-row {
-  margin-top: 12px;
+  margin-top: var(--space-md);
 }
 
 // =========================== 布局 ===========================
@@ -344,38 +576,55 @@ button {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: var(--space-sm);
 }
 
 .layout-grid {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 16px;
-  margin-top: 12px;
+  gap: var(--space-lg);
+  margin-top: var(--space-md);
 }
 
 // =========================== 弹窗 ===========================
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.45);
+  background: rgba(50, 56, 89, 0.5);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
   overscroll-behavior: contain;
   overflow-y: auto;
-  backdrop-filter: blur(2px);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
 }
 
 .modal-dialog {
-  background: $card-bg;
-  border-radius: $radius;
-  padding: 20px;
+  position: relative;
+  background: var(--color-bg-card);
+  color: var(--color-text);
+  border-radius: var(--radius-lg);
+  padding: var(--space-xl);
   width: 90%;
   max-width: 480px;
   max-height: 80vh;
   overflow-y: auto;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--shadow-lg), var(--shadow-glow);
+  border: 1px solid var(--color-border);
+
+  // 顶部渐变条，标识重点区域
+  &::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: var(--gradient-primary);
+    border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  }
 }
 
 .modal-sm {
@@ -386,56 +635,58 @@ button {
 .fade-enter-active,
 .fade-leave-active {
   transition:
-    opacity 0.15s ease,
-    transform 0.15s ease;
+    opacity 0.18s ease,
+    transform 0.18s ease;
 }
 .fade-enter-from,
 .fade-leave-to {
   opacity: 0;
-  transform: scale(0.95) translateY(-8px);
+  transform: scale(0.92) translateY(-12px);
 }
 
 .modal-list {
   list-style: none;
   padding: 0;
-  margin: 8px 0;
+  margin: var(--space-sm) 0;
 }
 
 .modal-list-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 8px 10px;
-  border: 1px solid $border;
-  border-radius: $radius-sm;
+  padding: var(--space-sm) 10px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
   margin-bottom: 6px;
-  gap: 8px;
+  gap: var(--space-sm);
+  background: var(--color-bg-subtle);
 }
 
 .hint {
-  font-size: 12px;
-  color: $text-muted;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
 }
 
 .empty-hint {
-  color: $text-muted-light;
-  font-size: 14px;
-  padding: 12px 0;
+  color: var(--color-text-muted);
+  font-size: var(--font-size-base);
+  padding: var(--space-md) 0;
 }
 
 // =========================== Toast ===========================
 .toast {
   position: fixed;
-  bottom: 24px;
+  bottom: var(--space-xl);
   left: 50%;
   transform: translateX(-50%);
-  background: #1e293b;
-  color: #e2e8f0;
+  background: var(--gradient-primary);
+  color: #fff;
   padding: 10px 20px;
-  border-radius: 10px;
-  font-size: 14px;
+  border-radius: var(--radius-sm);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-semibold);
   white-space: nowrap;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  box-shadow: var(--shadow-lg), var(--shadow-glow);
   z-index: 2000;
 }
 
@@ -457,152 +708,33 @@ button {
 
   + .changelog-version {
     padding-top: 14px;
-    border-top: 1px solid $border;
+    border-top: 1px solid var(--color-border);
   }
 }
 
 .changelog-header {
   display: flex;
   align-items: baseline;
-  gap: 8px;
+  gap: var(--space-sm);
   margin-bottom: 6px;
-  font-size: 15px;
+  font-size: var(--font-size-md);
+
+  strong {
+    color: var(--color-primary);
+  }
 }
 
 .changelog-date {
-  font-size: 12px;
-  color: $text-muted-light;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-muted);
 }
 
 .changelog-list {
   margin: 0;
   padding-left: 18px;
-  font-size: 14px;
+  font-size: var(--font-size-base);
   line-height: 1.8;
-}
-
-// =========================== 暗色模式 ===========================
-.dark-card {
-  background: $card-bg-dark;
-  color: $text-light;
-
-  .muted {
-    color: $text-muted-light;
-  }
-
-  input[type='text'],
-  input[type='number'],
-  select,
-  textarea {
-    background: $chip-bg-dark;
-    border-color: $border-dark;
-    color: $text-light;
-
-    &:focus {
-      border-color: $primary-dark;
-      box-shadow: 0 0 0 3px rgba($primary-dark, 0.15);
-    }
-  }
-
-  hr {
-    border-top-color: $border-dark;
-  }
-
-  .chip {
-    background: $chip-bg-dark;
-    border-color: $border-dark;
-    color: $text-light;
-
-    &:hover {
-      border-color: $primary-dark;
-    }
-
-    &.checked {
-      background: #2e1065;
-      border-color: $primary-dark;
-    }
-  }
-
-  button.ghost {
-    background: $chip-bg-dark;
-    color: $text-light;
-  }
-
-  .btn-danger {
-    background: $danger-dark;
-  }
-
-  .chip-count {
-    background: $border-dark;
-    color: $text-light;
-
-    .chip.checked & {
-      background: $primary-dark;
-      color: #fff;
-    }
-  }
-
-  .empty-chip-hint,
-  .empty-hint {
-    color: $text-muted;
-  }
-
-  .modal-dialog {
-    background: $card-bg-dark;
-    color: $text-light;
-
-    input[type='text'] {
-      background: $chip-bg-dark;
-      border-color: $border-dark;
-      color: $text-light;
-    }
-
-    button.ghost {
-      background: $chip-bg-dark;
-      color: $text-light;
-    }
-  }
-
-  .modal-list-item {
-    border-color: $border-dark;
-  }
-  .hint {
-    color: $text-muted-light;
-  }
-
-  .changelog-version + .changelog-version {
-    border-top-color: $border-dark;
-  }
-
-  .ban-slider {
-    background: $border-dark;
-  }
-  .ban-value {
-    color: #a78bfa;
-  }
-
-  .unit-btn {
-    background: $chip-bg-dark;
-    border-color: $border-dark;
-    color: #cbd5e1;
-
-    &:hover {
-      border-color: $primary-dark;
-    }
-
-    &.active {
-      background: $primary-dark;
-      border-color: $primary-dark;
-      color: #fff;
-    }
-  }
-}
-
-// 暗色模式下背景图叠加半透明黑色遮罩
-html.dark body {
-  background:
-    linear-gradient(rgba(15, 23, 42, 0.75), rgba(15, 23, 42, 0.75)),
-    url('./assets/BG.JPG') center / cover no-repeat fixed;
+  color: var(--color-text-secondary);
 }
 
 // =========================== 移动端 ===========================
@@ -615,16 +747,17 @@ html.dark body {
   .layout-grid {
     grid-template-columns: 1fr;
 
+    // 右栏固定顶部（结果预览），用不透明底色保证可读性
     > div:last-child {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
       z-index: 100;
-      background: $bg;
-      padding: 6px 12px 6px;
-      border-bottom: 1px solid $border-light;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+      background: var(--color-bg-card);
+      padding: 6px 12px;
+      border-bottom: 1px solid var(--color-border);
+      box-shadow: var(--shadow-md);
 
       .muted,
       p:last-child {
@@ -633,13 +766,8 @@ html.dark body {
     }
   }
 
-  .dark-card .layout-grid > div:last-child {
-    background: $card-bg-dark;
-    border-top-color: $border-dark;
-  }
-
   .preview {
-    font-size: 12px;
+    font-size: var(--font-size-sm);
     padding: 6px 10px;
     min-height: 60px;
     margin-top: 0;
@@ -650,10 +778,10 @@ html.dark body {
     flex-wrap: wrap;
     align-items: center;
     gap: 6px;
-    padding-top: 8px;
+    padding-top: var(--space-sm);
 
     h2 {
-      font-size: 16px;
+      font-size: var(--font-size-lg);
       width: 100%;
     }
 
@@ -665,7 +793,7 @@ html.dark body {
   }
 
   .switch-label {
-    font-size: 12px;
+    font-size: var(--font-size-sm);
   }
 
   button:not(.changelog-btn):not(.unit-btn):not(.delete-btn) {
@@ -673,7 +801,7 @@ html.dark body {
   }
 
   .changelog-btn {
-    font-size: 11px;
+    font-size: var(--font-size-xs);
     padding: 3px 8px;
   }
 
@@ -696,7 +824,7 @@ html.dark body {
   }
 
   .chip {
-    font-size: 13px;
+    font-size: var(--font-size-sm);
     padding: 5px 8px;
   }
 
@@ -707,7 +835,7 @@ html.dark body {
   }
 
   .action-row {
-    margin-top: 8px;
+    margin-top: var(--space-sm);
   }
 
   .modal-dialog {

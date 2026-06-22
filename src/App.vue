@@ -49,10 +49,10 @@ const {
 </script>
 
 <template>
-  <div class="card" :class="{ 'dark-card': darkMode }">
+  <div class="card">
     <!-- 标题栏 + 暗色模式开关 -->
     <div class="flex-between">
-      <h2>处罚结果生成器 V3.0.2</h2>
+      <h2 class="app-title">处罚结果生成器 V3.0.2</h2>
       <label class="switch-row">
         <span class="switch-label">暗色模式</span>
         <span class="switch" :class="{ active: darkMode }" @click="toggleDark">
@@ -136,6 +136,14 @@ const {
 </template>
 
 <style scoped>
+.app-title {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  background-clip: text;
+  -webkit-text-fill-color: transparent;
+  color: var(--color-primary);
+}
+
 .switch-row {
   display: flex !important;
   align-items: center;
@@ -146,7 +154,7 @@ const {
 }
 .switch-label {
   font-size: 13px;
-  color: #64748b;
+  color: var(--color-text-muted);
   user-select: none;
 }
 .switch {
@@ -154,12 +162,13 @@ const {
   width: 36px;
   height: 20px;
   border-radius: 10px;
-  background: #cbd5e1;
-  transition: background 0.2s ease;
+  background: var(--color-border);
+  transition: background 0.2s ease, box-shadow 0.2s ease;
   flex-shrink: 0;
 }
 .switch.active {
-  background: #0ea5a4;
+  background: var(--color-primary);
+  box-shadow: 0 0 12px rgba(122, 109, 241, 0.4);
 }
 .switch-knob {
   position: absolute;
@@ -177,35 +186,19 @@ const {
 }
 
 .changelog-btn {
-  background: transparent;
-  color: #64748b;
-  border: 1px solid #e2e8f0;
+  background: var(--color-bg-card);
+  color: var(--color-primary);
+  border: 1px solid var(--color-primary);
   padding: 4px 10px;
-  border-radius: 6px;
+  border-radius: var(--radius-xs);
   font-size: 12px;
-  font-weight: 400;
+  font-weight: 500;
   cursor: pointer;
   white-space: nowrap;
-  transition: background 0.15s;
+  transition: background 0.15s, box-shadow 0.15s;
 }
 .changelog-btn:hover {
-  background: #eef2f7;
-}
-:global(.dark-card) .changelog-btn {
-  color: #94a3b8;
-  border-color: #475569;
-}
-:global(.dark-card) .changelog-btn:hover {
-  background: #334155;
-}
-
-:global(.dark-card) .switch-label {
-  color: #94a3b8;
-}
-:global(.dark-card) .switch {
-  background: #475569;
-}
-:global(.dark-card) .switch.active {
-  background: #0d9488;
+  background: var(--chip-active-bg);
+  box-shadow: var(--shadow-sm);
 }
 </style>

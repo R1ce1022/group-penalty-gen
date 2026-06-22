@@ -19,8 +19,8 @@ export default defineConfig({
         name: '处罚结果生成器',
         short_name: '处罚生成器',
         description: '群管理处罚结果生成工具',
-        theme_color: '#0ea5a4',
-        background_color: '#f7fafc',
+        theme_color: '#7a6df1',
+        background_color: '#f5f7fa',
         display: 'standalone',
         orientation: 'any',
         icons: [

@@ -41,12 +41,19 @@ function onKeydown(e: KeyboardEvent) {
     <span
       v-for="m in members"
       :key="m.id"
-      class="chip"
+      class="chip chip-active"
       :class="{ checked: selectedMemberId === m.id }"
       @click="emit('select', m.id)"
     >
       @{{ m.label }}
-      <span class="chip-count">{{ m.count }}</span>
+      <span
+        class="chip-count"
+        :class="{
+          'count-warn': m.count >= 1 && m.count < 3,
+          'count-danger': m.count >= 3,
+        }"
+        >{{ m.count }}</span
+      >
     </span>
     <div v-if="members.length === 0" class="empty-chip-hint">
       还没有成员，添加后点击选中。
