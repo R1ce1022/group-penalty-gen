@@ -1,5 +1,5 @@
 {
-  "name": "vue-punishment",
+  "name": "group-penalty-gen",
   "private": true,
   "version": "0.0.0",
   "type": "module",
@@ -7,11 +7,10 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "preview": "vite preview",
-    "deploy": "npm run build && npx gh-pages -d dist"
+    "deploy": "npm run build && node scripts/sync-docs.mjs"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^6.0.7",
-    "gh-pages": "^6.3.0",
     "sass": "^1.101.0",
     "typescript": "~6.0.2",
     "vite": "^8.0.12",

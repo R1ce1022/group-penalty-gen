@@ -5,24 +5,11 @@
 */
 import { ref, computed } from 'vue'
 import type { Violation } from '../types'
-
-/** 8 个默认违规选项 */
-function createDefaultViolations(): Violation[] {
-  return [
-    { id: 1, label: '猎奇', checked: false },
-    { id: 2, label: '涉黄', checked: false },
-    { id: 3, label: '擦边', checked: false },
-    { id: 4, label: '刷屏', checked: false },
-    { id: 5, label: '涉政', checked: false },
-    { id: 6, label: '晒卡', checked: false },
-    { id: 7, label: '过分的负面情绪输出', checked: false },
-    { id: 8, label: '影响群内环境', checked: false },
-  ]
-}
+import { CUSTOM_ID_THRESHOLD, createDefaultViolations } from '../data/defaults'
 
 export function useViolations() {
   const violations = ref<Violation[]>(createDefaultViolations())
-  const nextViolationId = ref(9)     // 默认违规占用 id 1-8，自定义从 9 开始
+  const nextViolationId = ref(CUSTOM_ID_THRESHOLD) // 默认违规占用 id 1-8，自定义从阈值开始
 
   /** 当前勾选的违规标签列表 */
   const selectedViolations = computed(() =>
@@ -69,7 +56,7 @@ export function useViolations() {
   /** 重置到默认违规列表，清除所有自定义违规 */
   function resetViolations() {
     violations.value = createDefaultViolations()
-    nextViolationId.value = 9
+    nextViolationId.value = CUSTOM_ID_THRESHOLD
   }
 
   /** 清空所有勾选（保留条目） */

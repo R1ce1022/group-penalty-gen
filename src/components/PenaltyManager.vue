@@ -5,6 +5,7 @@
 -->
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { CUSTOM_ID_THRESHOLD } from '../data/defaults'
 
 const props = defineProps<{
   penalties: { id: number; label: string; checked: boolean }[]
@@ -23,8 +24,10 @@ const emit = defineEmits<{
 const showModal = ref(false)     // 管理弹窗显隐
 const inputName = ref('')        // 自定义处罚名称
 
-/** 只显示 id>=9 的处罚（即用户自定义的处罚） */
-const customPenalties = computed(() => props.penalties.filter((p) => p.id >= 9))
+/** 只显示 id >= 阈值的处罚（即用户自定义的处罚） */
+const customPenalties = computed(() =>
+  props.penalties.filter((p) => p.id >= CUSTOM_ID_THRESHOLD),
+)
 /** 是否有勾选了含"禁言"的处罚项，控制滑轨显示 */
 const hasBan = computed(() =>
   props.penalties.some((p) => p.checked && p.label.includes('禁言')),

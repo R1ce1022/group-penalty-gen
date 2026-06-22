@@ -5,6 +5,7 @@
 -->
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import { CUSTOM_ID_THRESHOLD } from '../data/defaults'
 
 const props = defineProps<{
   violations: {
@@ -24,9 +25,9 @@ const showModal = ref(false)         // 管理弹窗显隐
 const inputName = ref('')            // 自定义违规名称
 const inputReminder = ref('')        // 自定义违规的自动提醒（可选）
 
-/** 只显示 id>=9 的违规（即用户自定义的违规） */
+/** 只显示 id >= 阈值的违规（即用户自定义的违规） */
 const customViolations = computed(() =>
-  props.violations.filter((v) => v.id >= 9),
+  props.violations.filter((v) => v.id >= CUSTOM_ID_THRESHOLD),
 )
 
 /** 添加自定义违规，附带提醒文本 */

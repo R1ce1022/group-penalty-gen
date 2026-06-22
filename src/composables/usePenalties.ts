@@ -5,18 +5,11 @@
 */
 import { ref, computed, watch } from 'vue'
 import type { Penalty } from '../types'
-
-/** 2 个默认处罚选项 */
-function createDefaultPenalties(): Penalty[] {
-  return [
-    { id: 1, label: '撤回相关消息并禁言', checked: false },
-    { id: 2, label: '移出群聊', checked: false },
-  ]
-}
+import { CUSTOM_ID_THRESHOLD, createDefaultPenalties } from '../data/defaults'
 
 export function usePenalties() {
   const penalties = ref<Penalty[]>(createDefaultPenalties())
-  const nextPenaltyId = ref(9)      // 默认处罚占用 id 1-2，自定义从 9 开始
+  const nextPenaltyId = ref(CUSTOM_ID_THRESHOLD) // 默认处罚占用 id 1-2，自定义从阈值开始
   const banDuration = ref(30)       // 禁言时长（数值部分）
   const banUnit = ref('分钟')        // 禁言单位：分钟 / 小时 / 天
 
@@ -56,7 +49,7 @@ export function usePenalties() {
   /** 重置到默认处罚列表 + 禁言时长复位 */
   function resetPenalties() {
     penalties.value = createDefaultPenalties()
-    nextPenaltyId.value = 9
+    nextPenaltyId.value = CUSTOM_ID_THRESHOLD
     banDuration.value = 30
     banUnit.value = '分钟'
   }

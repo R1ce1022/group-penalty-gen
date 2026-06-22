@@ -7,7 +7,9 @@ import { VitePWA } from 'vite-plugin-pwa'
 
 export default defineConfig({
   base: './',
-  build: { outDir: 'docs' },
+  // 构建产物输出到 dist，再由 scripts/sync-docs.mjs 同步到 docs（master /docs 部署），
+  // 同步时保留 .nojekyll 等 GitHub Pages 必需文件。
+  build: { outDir: 'dist' },
   plugins: [
     vue(),
     VitePWA({
