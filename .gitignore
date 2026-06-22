@@ -11,7 +11,7 @@ node_modules
 dist
 dist-ssr
 *.local
-
+PRD.md
 # docs/ 是 GitHub Pages 部署目录（master /docs 模式），必须提交，勿忽略。
 # 其内容由 `npm run deploy` → scripts/sync-docs.mjs 自动清理重建，
 # 不要手动往 docs/assets 堆放构建产物，否则会累积旧 hash 文件。
