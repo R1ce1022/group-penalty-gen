@@ -18,8 +18,8 @@ const emit = defineEmits<{
   adjust: [id: number, delta: number]
 }>()
 
-const showModal = ref(false)    // 管理弹窗显隐
-const inputName = ref('')       // 添加成员的输入框
+const showModal = ref(false) // 管理弹窗显隐
+const inputName = ref('') // 添加成员的输入框
 
 /** 添加成员，自动过滤空输入 */
 function add() {
@@ -35,6 +35,26 @@ function onKeydown(e: KeyboardEvent) {
     add()
   }
 }
+
+/**
+ * 根据违规次数生成徽标内联样式：色相随次数连续过渡。
+ * 0 次绿(hue 120) → 1 次黄(hue 55) → 逐次往红靠 → 10 次纯红(hue 0)。
+ * 文字始终白色。10 次以上锁定纯红。
+ */
+function countStyle(count: number) {
+  let hue: number
+  if (count <= 0)
+    hue = 120 // 绿
+  else if (count === 1)
+    hue = 55 // 黄
+  else if (count >= 10)
+    hue = 0 // 纯红
+  else hue = 55 - ((count - 1) * 55) / 9 // 1→10 次：55 线性到 0
+  return {
+    background: `hsl(${hue}, 75%, 55%)`,
+    color: '#fff',
+  }
+}
 </script>
 
 <template>
@@ -48,14 +68,7 @@ function onKeydown(e: KeyboardEvent) {
       @click="emit('select', m.id)"
     >
       @{{ m.label }}
-      <span
-        class="chip-count"
-        :class="{
-          'count-warn': m.count >= 1 && m.count < 3,
-          'count-danger': m.count >= 3,
-        }"
-        >{{ m.count }}</span
-      >
+      <span class="chip-count" :style="countStyle(m.count)">{{ m.count }}</span>
     </span>
     <div v-if="members.length === 0" class="empty-chip-hint">
       还没有成员，添加后点击选中。

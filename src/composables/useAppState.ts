@@ -19,6 +19,7 @@ import { useDarkMode } from './useDarkMode'
 import { usePersistence } from './usePersistence'
 import { useLayoutAdapt } from './useLayoutAdapt'
 import { useScrollLock } from './useScrollLock'
+import { useChangelogRead } from './useChangelogRead'
 import { changelog } from '../data/changelog'
 
 export function useAppState() {
@@ -75,6 +76,13 @@ export function useAppState() {
   const { toastMsg, toastShow, showToast } = useToast()
   const { darkMode, toggleDark, initDarkFromStorage } = useDarkMode()
 
+  // 更新历史未读追踪：以 changelog[0].version 为最新版本
+  const {
+    hasUnread: hasUnreadChangelog,
+    check: checkChangelog,
+    markSeen: markChangelogSeen,
+  } = useChangelogRead(changelog[0].version)
+
   // ===================== 结果文本计算 =====================
   const { resultText } = useResult(
     currentMember,
@@ -89,6 +97,12 @@ export function useAppState() {
   // ===================== 弹窗显隐状态 =====================
   const showResetConfirm = ref(false)
   const showChangelog = ref(false)
+
+  /** 打开更新历史弹窗，并标记当前版本为已看（消除未读红点） */
+  function openChangelog() {
+    showChangelog.value = true
+    markChangelogSeen()
+  }
 
   // ===================== 复制到剪贴板 =====================
   /**
@@ -176,6 +190,7 @@ export function useAppState() {
 
   onMounted(() => {
     loadFromStorage()
+    checkChangelog()
   })
 
   return {
@@ -191,7 +206,7 @@ export function useAppState() {
     toastShow,
     showResetConfirm,
     showChangelog,
-    currentMember,
+    hasUnreadChangelog,
     banMax,
     resultText,
     selectMember,
@@ -211,6 +226,7 @@ export function useAppState() {
     clearAll,
     resetAll,
     toggleDark,
+    openChangelog,
     fixedColRef,
     changelog,
   }

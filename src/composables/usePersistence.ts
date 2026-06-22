@@ -120,5 +120,5 @@ export function usePersistence(s: PersistenceState) {
     { deep: true },
   )
 
-  return { load, save }
+  return { load }
 }

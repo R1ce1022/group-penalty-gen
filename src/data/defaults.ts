@@ -4,7 +4,7 @@
   消除 useAppState / useViolations / usePenalties / PenaltyManager 之间的
   重复定义和散落的魔法数字/魔法字符串。
 */
-import type { Penalty, Violation } from '../types'
+import type { BanUnit, Penalty, Violation } from '../types'
 
 /**
  * 自定义条目 ID 起始阈值。
@@ -20,9 +20,6 @@ export const DEFAULT_BAN_PENALTY_ID = 1
 
 /** 禁言时长默认值（数值部分） */
 export const DEFAULT_BAN_DURATION = 30
-
-/** 禁言单位联合类型 */
-export type BanUnit = '分钟' | '小时' | '天'
 
 /** 禁言单位默认值 */
 export const DEFAULT_BAN_UNIT: BanUnit = '分钟'

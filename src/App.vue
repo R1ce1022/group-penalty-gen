@@ -25,6 +25,7 @@ const {
   toastShow,
   showResetConfirm,
   showChangelog,
+  hasUnreadChangelog,
   banMax,
   resultText,
   selectMember,
@@ -44,6 +45,7 @@ const {
   clearAll,
   resetAll,
   toggleDark,
+  openChangelog,
   fixedColRef,
   changelog,
 } = useAppState()
@@ -60,8 +62,9 @@ const {
           <span class="switch-knob"></span>
         </span>
       </label>
-      <button class="changelog-btn" @click="showChangelog = true">
+      <button class="changelog-btn" @click="openChangelog">
         更新历史
+        <span v-if="hasUnreadChangelog" class="changelog-unread-dot"></span>
       </button>
     </div>
     <p class="muted">点击预览框即可复制内容，复制后违规次数自动+1</p>
@@ -170,7 +173,9 @@ const {
   height: 20px;
   border-radius: 10px;
   background: var(--color-border);
-  transition: background 0.2s ease, box-shadow 0.2s ease;
+  transition:
+    background 0.2s ease,
+    box-shadow 0.2s ease;
   flex-shrink: 0;
 }
 .switch.active {
@@ -202,10 +207,23 @@ const {
   font-weight: 500;
   cursor: pointer;
   white-space: nowrap;
-  transition: background 0.15s, box-shadow 0.15s;
+  transition:
+    background 0.15s,
+    box-shadow 0.15s;
 }
 .changelog-btn:hover {
   background: var(--chip-active-bg);
   box-shadow: var(--shadow-sm);
+}
+/* 未读更新红点 */
+.changelog-unread-dot {
+  display: inline-block;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--color-danger);
+  box-shadow: 0 0 6px rgba(239, 68, 68, 0.6);
+  margin-left: 3px;
+  vertical-align: middle;
 }
 </style>

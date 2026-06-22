@@ -1,44 +1,38 @@
 <!--
   ResultPreview — 结果预览组件
   显示生成的处罚通知文本，点击触发复制到剪贴板。
-  内容变化时自动做高度平滑过渡动画。
+  内容变化时给一个柔和的脉冲反馈（不操作 height，避免过渡稳定性问题）。
 -->
 <script setup lang="ts">
-import { ref, watch, onMounted } from 'vue'
+import { ref, watch } from 'vue'
 
 const props = defineProps<{ resultText: string }>()
 const emit = defineEmits<{ copy: [] }>()
 
 const previewRef = ref<HTMLDivElement | null>(null)
-// 高度过渡时长，须与 CSS .preview 的 transition: height 保持一致
-const HEIGHT_TRANSITION_MS = 250
-let lastPreviewHeight = 0   // 记录上次内容高度，用于动画过渡
-let isReady = false         // 跳过首次加载的动画
+let pulseTimer: ReturnType<typeof setTimeout> | undefined
 
-/** 监听结果文本变化，通过固定高度 → 新高度的方式触发 CSS transition */
+/**
+ * 监听结果文本变化，给预览框加一个脉冲 class 触发 CSS animation。
+ * 不操作 height/transform，避免反复点击时的时序 bug 与边框颤抖。
+ */
 watch(
   () => props.resultText,
   () => {
     const el = previewRef.value
-    if (!el || !isReady) return
-    const newHeight = el.scrollHeight
-    if (newHeight === lastPreviewHeight) return
-    el.style.height = lastPreviewHeight + 'px'
-    void el.offsetHeight          // 强制重排
-    el.style.height = newHeight + 'px'
-    lastPreviewHeight = newHeight
-    setTimeout(() => {
-      el.style.height = ''        // 过渡结束后释放固定高度
-    }, HEIGHT_TRANSITION_MS)
+    if (!el) return
+    // 先移除再添加，确保连续变化都能重新触发 animation
+    el.classList.remove('pulse')
+    void el.offsetWidth // 强制重排，重置动画
+    el.classList.add('pulse')
+    if (pulseTimer) clearTimeout(pulseTimer)
+    pulseTimer = setTimeout(() => {
+      el.classList.remove('pulse')
+      pulseTimer = undefined
+    }, 300)
   },
   { flush: 'post' },
 )
-
-onMounted(() => {
-  const el = previewRef.value
-  if (el) lastPreviewHeight = el.scrollHeight
-  isReady = true
-})
 </script>
 
 <template>
@@ -72,7 +66,6 @@ onMounted(() => {
   box-shadow: var(--shadow-sm);
   box-sizing: border-box;
   transition:
-    height 0.25s ease,
     background 0.15s,
     border-color 0.15s,
     box-shadow 0.15s;
@@ -94,5 +87,20 @@ onMounted(() => {
 }
 .preview:active {
   border-color: var(--color-primary);
+}
+
+/* 内容变化脉冲反馈：边框短暂高亮 + 轻微辉光，不动 height/transform */
+.preview.pulse {
+  animation: preview-pulse 0.3s ease;
+}
+@keyframes preview-pulse {
+  0% {
+    border-color: var(--color-primary);
+    box-shadow: var(--shadow-sm), var(--shadow-glow);
+  }
+  100% {
+    border-color: var(--preview-border);
+    box-shadow: var(--shadow-sm);
+  }
 }
 </style>

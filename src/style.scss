@@ -365,7 +365,7 @@ hr {
   color: var(--chip-reminder-text);
 }
 
-// 违规次数徽标：三档语义色（0 灰 / 1-2 黄 / 3+ 红）
+// 违规次数徽标：背景深度随次数连续递增（内联 style 控制，见 MemberManager.countStyle）
 .chip-count {
   display: inline-flex;
   align-items: center;
@@ -374,22 +374,11 @@ hr {
   height: 18px;
   padding: 0 4px;
   border-radius: 9px;
-  background: var(--color-border);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-bold);
-  color: #fff;
-  transition: background 0.15s;
-
-  // 1-2 次：暖黄提醒
-  &.count-warn {
-    background: var(--color-warning);
-    color: #fff;
-  }
-  // 3 次及以上：红色警示
-  &.count-danger {
-    background: var(--color-danger);
-    color: #fff;
-  }
+  transition:
+    background 0.2s,
+    color 0.2s;
 }
 
 .empty-chip-hint {
@@ -599,6 +588,9 @@ button {
   grid-template-columns: 1fr 1fr;
   gap: var(--space-lg);
   margin-top: var(--space-md);
+  // 两栏顶部对齐、各自按内容高度，右栏预览框高度变化不会拉伸/顶动左栏，
+  // 左栏编辑区与按钮位置保持稳定。
+  align-items: start;
 }
 
 // =========================== 弹窗 ===========================
@@ -644,6 +636,21 @@ button {
 
 .modal-sm {
   max-width: 380px;
+}
+
+// 更新历史弹窗：固定高度，内容区单独滚动，避免展开/折叠时弹窗整体跳动
+.changelog-dialog {
+  height: 80vh;
+  max-height: 80vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+
+  .changelog-list-wrap {
+    flex: 1;
+    overflow-y: auto;
+    min-height: 0;
+  }
 }
 
 // 弹窗过渡
@@ -758,38 +765,173 @@ button {
 }
 
 // =========================== 更新历史弹窗 ===========================
-.changelog-version {
-  margin-top: 14px;
+.changelog-list-wrap {
+  margin-top: var(--space-sm);
+}
 
-  + .changelog-version {
-    padding-top: 14px;
-    border-top: 1px solid var(--color-border);
+// 手风琴单元
+.changelog-version {
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  margin-bottom: var(--space-sm);
+  overflow: hidden;
+  background: var(--color-bg-subtle);
+
+  // 第一个（最新版本）用主色边框高亮
+  &:first-child {
+    border-color: var(--color-primary-light);
   }
 }
 
 .changelog-header {
   display: flex;
-  align-items: baseline;
+  align-items: center;
   gap: var(--space-sm);
-  margin-bottom: 6px;
+  padding: 10px 12px;
+  cursor: pointer;
+  user-select: none;
   font-size: var(--font-size-md);
+
+  &:hover {
+    background: var(--chip-active-bg);
+  }
+}
+
+.changelog-version-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
 
   strong {
     color: var(--color-primary);
   }
 }
 
+.changelog-latest {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-bold);
+  padding: 1px 6px;
+  border-radius: var(--radius-full);
+  background: var(--gradient-primary);
+  color: #fff;
+}
+
 .changelog-date {
   font-size: var(--font-size-sm);
   color: var(--color-text-muted);
+  margin-left: auto;
 }
 
-.changelog-list {
+// 自定义箭头，展开时旋转
+.changelog-chevron {
+  width: 7px;
+  height: 7px;
+  border-right: 2px solid var(--color-text-muted);
+  border-bottom: 2px solid var(--color-text-muted);
+  transform: rotate(45deg);
+  transition: transform 0.18s ease;
+  flex-shrink: 0;
+}
+.changelog-version.open .changelog-chevron {
+  transform: rotate(-135deg);
+}
+
+// 折叠容器：用 grid-template-rows 0fr↔1fr 实现高度平滑过渡
+// （这是 CSS 过渡 height:auto 的标准技巧，配合 overflow:hidden 裁剪）
+// 注意：padding/border 不能放在 .changelog-items 上，否则 grid 0fr 时
+// 仍占高度导致收不干净。间距改由内层 .changelog-group 自身承担。
+.changelog-collapse {
+  display: grid;
+  grid-template-rows: 0fr;
+  transition:
+    grid-template-rows 0.25s ease,
+    opacity 0.25s ease;
+  opacity: 0;
+
+  > .changelog-items {
+    overflow: hidden;
+    min-height: 0;
+  }
+}
+.changelog-version.open .changelog-collapse {
+  grid-template-rows: 1fr;
+  opacity: 1;
+}
+
+.changelog-items {
   margin: 0;
-  padding-left: 18px;
+  // 仅左右内边距（不撑高，不影响 grid 0fr 折叠），上下间距由 group 自身承担
+  padding: 0 var(--space-md);
   font-size: var(--font-size-base);
-  line-height: 1.8;
+  line-height: 1.7;
   color: var(--color-text-secondary);
+}
+
+// 展开时标题底部加分隔线（不放在 collapse 内，避免折叠残留高度）
+.changelog-version.open .changelog-header {
+  border-bottom: 1px solid var(--color-border);
+}
+
+// 同类型变更分组：标签 + 该类型所有条目列表
+.changelog-group {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-sm);
+  padding: 6px 0;
+
+  &:first-child {
+    padding-top: var(--space-sm);
+  }
+
+  & + .changelog-group {
+    border-top: 1px dashed var(--color-border);
+    margin-top: 4px;
+    padding-top: 10px;
+  }
+}
+
+.changelog-group-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  flex: 1;
+
+  li {
+    padding: 2px 0;
+    &::before {
+      content: '·';
+      color: var(--color-text-muted);
+      margin-right: 6px;
+    }
+  }
+}
+
+// 变更类型标签：四色
+.changelog-tag {
+  flex-shrink: 0;
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-semibold);
+  padding: 1px 7px;
+  border-radius: var(--radius-xs);
+  line-height: 1.6;
+  white-space: nowrap;
+  margin-top: 2px;
+}
+.tag-feature {
+  background: var(--chip-active-bg);
+  color: var(--color-primary);
+}
+.tag-bugfix {
+  background: rgba(34, 197, 94, 0.15);
+  color: var(--color-success);
+}
+.tag-improvement {
+  background: var(--chip-update-bg);
+  color: var(--chip-update-text);
+}
+.tag-ui {
+  background: var(--chip-reminder-bg);
+  color: var(--chip-reminder-text);
 }
 
 // =========================== 移动端 ===========================
@@ -808,7 +950,9 @@ button {
     grid-template-columns: 1fr;
 
     // 右栏固定顶部（结果预览），用与卡片一致的半透明毛玻璃底，
-    // 保证滚动内容可读且与卡片视觉统一；限高防止预览文本过长占满屏幕
+    // 保证滚动内容可读且与卡片视觉统一。
+    // 不限高、不滚动：预览框高度随内容自适应撑开，直接占据顶部空间，
+    // 下方编辑区由 useLayoutAdapt 动态 padding-top 自动下移避让。
     > div:last-child {
       position: fixed;
       top: 0;
@@ -821,8 +965,6 @@ button {
       padding: 8px 12px;
       border-bottom: 1px solid var(--color-border);
       box-shadow: var(--shadow-md);
-      max-height: 40vh;
-      overflow-y: auto;
 
       .muted,
       p:last-child {
