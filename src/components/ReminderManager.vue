@@ -4,10 +4,11 @@
   勾选的提醒文本会出现在处罚结果"备注提醒"段落中。
 -->
 <script setup lang="ts">
-import { ref, computed } from 'vue'
+import { ref } from 'vue'
+import type { Reminder } from '../types'
 
-const props = defineProps<{
-  reminders: { id: number; text: string; selected: boolean }[]
+defineProps<{
+  reminders: Reminder[]
 }>()
 const emit = defineEmits<{
   toggle: [id: number]
@@ -17,8 +18,6 @@ const emit = defineEmits<{
 
 const showModal = ref(false)     // 管理弹窗显隐
 const inputText = ref('')        // 添加提醒的输入框
-
-const customReminders = computed(() => props.reminders)
 
 /** 添加备注提醒 */
 function add() {
@@ -76,11 +75,11 @@ function onKeydown(e: KeyboardEvent) {
           添加
         </button>
         <label style="margin-top: 16px">已添加的备注提醒</label>
-        <div v-if="customReminders.length === 0" class="empty-hint">
+        <div v-if="reminders.length === 0" class="empty-hint">
           还没有备注提醒。
         </div>
         <ul v-else class="modal-list">
-          <li v-for="r in customReminders" :key="r.id" class="modal-list-item">
+          <li v-for="r in reminders" :key="r.id" class="modal-list-item">
             <strong>{{ r.text }}</strong>
             <button class="ghost delete-btn" @click="emit('remove', r.id)">
               删除

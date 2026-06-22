@@ -7,6 +7,7 @@
 import { watch } from 'vue'
 import type { Ref } from 'vue'
 import type {
+  BanUnit,
   Member,
   Penalty,
   Reminder,
@@ -15,6 +16,7 @@ import type {
 } from '../types'
 import {
   CUSTOM_ID_THRESHOLD,
+  BAN_UNITS,
   createDefaultPenalties,
   createDefaultViolations,
 } from '../data/defaults'
@@ -31,7 +33,7 @@ interface PersistenceState {
   nextPenaltyId: Ref<number>
   nextReminderId: Ref<number>
   banDuration: Ref<number>
-  banUnit: Ref<string>
+  banUnit: Ref<BanUnit>
   darkMode: Ref<boolean>
   /** 暗色模式加载后需要同步 DOM class，由调用方提供回调 */
   onDarkLoaded?: () => void
@@ -90,7 +92,10 @@ export function usePersistence(s: PersistenceState) {
       s.nextPenaltyId.value = data.nextPenaltyId || CUSTOM_ID_THRESHOLD
       s.nextReminderId.value = data.nextReminderId || 1
       if (data.banDuration !== undefined) s.banDuration.value = data.banDuration
-      if (data.banUnit) s.banUnit.value = data.banUnit
+      // 仅接受合法单位，防止旧数据/损坏数据写入非法值
+      if (data.banUnit && BAN_UNITS.includes(data.banUnit as BanUnit)) {
+        s.banUnit.value = data.banUnit as BanUnit
+      }
       if (data.darkMode) {
         s.darkMode.value = true
         s.onDarkLoaded?.()

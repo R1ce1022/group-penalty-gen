@@ -5,15 +5,17 @@
 -->
 <script setup lang="ts">
 import { ref } from 'vue'
+import type { Member } from '../types'
 
 defineProps<{
-  members: { id: number; label: string; count: number }[]
+  members: Member[]
   selectedMemberId: number | null
 }>()
 const emit = defineEmits<{
   select: [id: number]
   add: [name: string]
   remove: [id: number]
+  adjust: [id: number, delta: number]
 }>()
 
 const showModal = ref(false)    // 管理弹窗显隐
@@ -87,7 +89,19 @@ function onKeydown(e: KeyboardEvent) {
         <ul v-else class="modal-list">
           <li v-for="m in members" :key="m.id" class="modal-list-item">
             <strong>@{{ m.label }}</strong>
-            <span class="hint">违规 {{ m.count }} 次</span>
+            <div class="count-adjust">
+              <button
+                class="ghost delete-btn"
+                :disabled="m.count <= 0"
+                @click="emit('adjust', m.id, -1)"
+              >
+                −
+              </button>
+              <span class="hint">违规 {{ m.count }} 次</span>
+              <button class="ghost delete-btn" @click="emit('adjust', m.id, 1)">
+                +
+              </button>
+            </div>
             <button class="ghost delete-btn" @click="emit('remove', m.id)">
               删除
             </button>

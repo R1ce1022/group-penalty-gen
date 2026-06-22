@@ -6,6 +6,19 @@ import type { ChangelogEntry } from '../types'
 
 export const changelog: ChangelogEntry[] = [
   {
+    version: 'V3.0.3',
+    date: '2026-06-22',
+    items: [
+      '按中务桐乃配色重做整套 UI：桐乃主题渐变背景、紫色光晕、卡片毛玻璃',
+      'chip 按成员/违规/处罚/备注四色分类，违规次数徽标三档警示色',
+      '禁言滑轨渐变 thumb、结果预览框改桐乃主题、弹窗与 toast 紫光特效',
+      '修复禁言处罚文本生成丢弃自定义标签的 bug，改用 id 精确匹配',
+      '成员管理弹窗新增违规次数 +/- 微调，可修正误触复制导致的 +1',
+      '清空不再重置禁言时长，提醒与备注文本自动去重',
+      '版本号统一为 changelog 单一真源，禁言单位/默认值抽常量',
+    ],
+  },
+  {
     version: 'V3.0.2',
     date: '2026-06-16',
     items: [

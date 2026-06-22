@@ -50,8 +50,8 @@
   --color-cancelled: #a0a6b3;
 
   // —— Chip 四类分类色（PRD 活动/重要/更新 + 备注扩展） ——
-  --chip-active-bg: #eee9fe;
-  --chip-active-border: #b9adf7;
+  --chip-active-bg: #e0d6fc;
+  --chip-active-border: #7a6df1;
   --chip-active-text: #5b4fd1;
 
   --chip-important-bg: #7a6df1;
@@ -95,9 +95,12 @@
   --radius-full: 999px;
 
   // —— 阴影 Shadow ——
-  --shadow-sm: 0 1px 2px rgba(50, 56, 89, 0.06), 0 1px 3px rgba(50, 56, 89, 0.04);
-  --shadow-md: 0 4px 12px rgba(50, 56, 89, 0.08), 0 2px 4px rgba(50, 56, 89, 0.04);
-  --shadow-lg: 0 12px 32px rgba(50, 56, 89, 0.12), 0 4px 8px rgba(50, 56, 89, 0.06);
+  --shadow-sm:
+    0 1px 2px rgba(50, 56, 89, 0.06), 0 1px 3px rgba(50, 56, 89, 0.04);
+  --shadow-md:
+    0 4px 12px rgba(50, 56, 89, 0.08), 0 2px 4px rgba(50, 56, 89, 0.04);
+  --shadow-lg:
+    0 12px 32px rgba(50, 56, 89, 0.12), 0 4px 8px rgba(50, 56, 89, 0.06);
   --shadow-glow: 0 0 24px rgba(122, 109, 241, 0.25);
   --shadow-focus: 0 0 0 3px rgba(122, 109, 241, 0.15);
 
@@ -117,6 +120,11 @@
 
   // —— 卡片底色（默认不透明，可被暗色覆盖） ——
   --card-surface: rgba(255, 255, 255, 0.92);
+
+  // —— 结果预览框专属配色（亮色：浅青白底 + 深字，保证对比度） ——
+  --preview-bg: #e6f7fa;
+  --preview-text: #1a1f2e;
+  --preview-border: #9eddf6;
 }
 
 // =========================== 暗色 Token 覆盖 ===========================
@@ -169,6 +177,11 @@
   --bg-glow: rgba(122, 109, 241, 0.12);
 
   --card-surface: rgba(30, 41, 59, 0.92);
+
+  // 预览框暗色：深底 + 浅字，避免亮色浅青白底配浅字导致对比度极差
+  --preview-bg: #0f1a2e;
+  --preview-text: #e6f6f6;
+  --preview-border: #2b3a55;
 }
 
 // =========================== 全局 ===========================
@@ -324,11 +337,13 @@ hr {
   }
 }
 
-// —— 活动 chip（成员）：浅紫 ——
+// —— 活动 chip（成员）：浅紫，选中态加强可见性 ——
 .chip-active.checked {
   background: var(--chip-active-bg);
-  border-color: var(--chip-active-border);
-  color: var(--chip-active-text);
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+  font-weight: var(--font-weight-semibold);
+  box-shadow: 0 2px 8px rgba(122, 109, 241, 0.2);
 }
 // —— 重要 chip（违规）：深紫白字 ——
 .chip-important.checked {
@@ -662,6 +677,46 @@ button {
   background: var(--color-bg-subtle);
 }
 
+// 成员违规次数微调控件（+/-）
+.count-adjust {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-left: auto;
+
+  // +/- 按钮用白底主色边，与列表项底色（bg-subtle）区分，确保可见
+  .delete-btn {
+    padding: 2px 0;
+    font-size: var(--font-size-md);
+    line-height: 1;
+    min-width: 28px;
+    height: 26px;
+    background: var(--color-bg-card);
+    color: var(--color-primary);
+    border: 1px solid var(--color-primary);
+    box-shadow: none;
+
+    &:hover:not(:disabled) {
+      background: var(--color-primary);
+      color: #fff;
+      border-color: var(--color-primary);
+      box-shadow: none;
+    }
+
+    &:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+      color: var(--color-text-placeholder);
+      border-color: var(--color-border);
+    }
+  }
+
+  .hint {
+    min-width: 64px;
+    text-align: center;
+  }
+}
+
 .hint {
   font-size: var(--font-size-sm);
   color: var(--color-text-muted);
@@ -742,22 +797,32 @@ button {
   .card {
     padding: 10px;
     padding-top: 0;
+    // 移除 backdrop-filter：带该属性的祖先会成为 position:fixed 后代的
+    // 包含块，导致下方固定列（结果预览）不再相对视口固定。移动端去掉它，
+    // 预览框才能正确固定在顶部方便复制。
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
   }
 
   .layout-grid {
     grid-template-columns: 1fr;
 
-    // 右栏固定顶部（结果预览），用不透明底色保证可读性
+    // 右栏固定顶部（结果预览），用与卡片一致的半透明毛玻璃底，
+    // 保证滚动内容可读且与卡片视觉统一；限高防止预览文本过长占满屏幕
     > div:last-child {
       position: fixed;
       top: 0;
       left: 0;
       right: 0;
       z-index: 100;
-      background: var(--color-bg-card);
-      padding: 6px 12px;
+      background: var(--card-surface);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      padding: 8px 12px;
       border-bottom: 1px solid var(--color-border);
       box-shadow: var(--shadow-md);
+      max-height: 40vh;
+      overflow-y: auto;
 
       .muted,
       p:last-child {
@@ -768,8 +833,8 @@ button {
 
   .preview {
     font-size: var(--font-size-sm);
-    padding: 6px 10px;
-    min-height: 60px;
+    padding: 8px 10px;
+    min-height: 56px;
     margin-top: 0;
   }
 

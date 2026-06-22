@@ -18,8 +18,8 @@ export function useViolations() {
 
   /**
    * 根据勾选的违规自动生成提醒内容：
-   * - 勾选"晒卡" → 自动追加"晒卡请移步群频道"
-   * - 违规设置了自定义 reminder → 追加该提醒
+   * - 勾选"晒卡" → 自动追加"晒卡请移步群频道"（多条晒卡违规只追加一次）
+   * - 违规设置了自定义 reminder → 追加该提醒（去重）
    */
   const autoReminder = computed(() => {
     const checked = violations.value.filter((v) => v.checked)
@@ -27,7 +27,8 @@ export function useViolations() {
     if (checked.some((v) => v.label.includes('晒卡')))
       r.push('晒卡请移步群频道')
     for (const v of checked) {
-      if (v.reminder?.trim()) r.push(v.reminder.trim())
+      const t = v.reminder?.trim()
+      if (t && !r.includes(t)) r.push(t)
     }
     return r
   })

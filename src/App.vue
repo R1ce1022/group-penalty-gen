@@ -30,6 +30,7 @@ const {
   selectMember,
   addMember,
   removeMember,
+  adjustMemberCount,
   toggleViolation,
   addViolation,
   removeViolation,
@@ -52,7 +53,7 @@ const {
   <div class="card">
     <!-- 标题栏 + 暗色模式开关 -->
     <div class="flex-between">
-      <h2 class="app-title">处罚结果生成器 V3.0.2</h2>
+      <h2 class="app-title">处罚结果生成器 {{ changelog[0].version }}</h2>
       <label class="switch-row">
         <span class="switch-label">暗色模式</span>
         <span class="switch" :class="{ active: darkMode }" @click="toggleDark">
@@ -74,6 +75,7 @@ const {
           @select="selectMember"
           @add="addMember"
           @remove="removeMember"
+          @adjust="adjustMemberCount"
         />
         <hr />
         <ViolationManager
@@ -112,14 +114,19 @@ const {
         </div>
       </div>
 
-      <!-- 右栏：结果预览 + toast -->
+      <!-- 右栏：结果预览（toast 移至 .card 根层级，避免移动端被固定列裁剪） -->
       <div ref="fixedColRef">
         <ResultPreview :result-text="resultText" @copy="copyResult" />
-        <Transition name="toast">
-          <div v-if="toastShow" class="toast">{{ toastMsg }}</div>
-        </Transition>
       </div>
     </div>
+
+    <!-- Toast 提示：Teleport 到 body，避免被 .card 的 backdrop-filter
+         干扰 position:fixed 包含块，确保始终固定在屏幕底部 -->
+    <Teleport to="body">
+      <Transition name="toast">
+        <div v-if="toastShow" class="toast">{{ toastMsg }}</div>
+      </Transition>
+    </Teleport>
 
     <!-- 弹窗 -->
     <ResetConfirmModal

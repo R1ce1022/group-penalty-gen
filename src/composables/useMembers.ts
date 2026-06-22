@@ -32,6 +32,13 @@ export function useMembers() {
     if (selectedMemberId.value === id) selectedMemberId.value = null
   }
 
+  /** 手动微调成员违规次数（delta 为 +1 / -1），下限 0，用于修正误触复制导致的 +1 */
+  function adjustMemberCount(id: number, delta: number) {
+    const m = members.value.find((x) => x.id === id)
+    if (!m) return
+    m.count = Math.max(0, m.count + delta)
+  }
+
   /** 仅清除选中状态 */
   function clearSelection() {
     selectedMemberId.value = null
@@ -52,6 +59,7 @@ export function useMembers() {
     selectMember,
     addMember,
     removeMember,
+    adjustMemberCount,
     clearSelection,
     resetMembers,
   }

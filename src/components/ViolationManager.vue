@@ -5,15 +5,11 @@
 -->
 <script setup lang="ts">
 import { ref, computed } from 'vue'
+import type { Violation } from '../types'
 import { CUSTOM_ID_THRESHOLD } from '../data/defaults'
 
 const props = defineProps<{
-  violations: {
-    id: number
-    label: string
-    checked: boolean
-    reminder?: string
-  }[]
+  violations: Violation[]
 }>()
 const emit = defineEmits<{
   toggle: [id: number]

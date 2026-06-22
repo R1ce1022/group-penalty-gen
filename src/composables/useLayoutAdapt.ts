@@ -6,6 +6,11 @@
 */
 import { onMounted, onUnmounted, ref } from 'vue'
 
+// 移动端断点，须与 style.scss 的 @media (max-width: 768px) 保持一致
+const MOBILE_BREAKPOINT = 768
+// 固定栏与下方内容之间的额外间距
+const FIXED_COL_GAP = 8
+
 export function useLayoutAdapt() {
   const fixedColRef = ref<HTMLDivElement | null>(null)
   let resizeObserver: ResizeObserver | null = null
@@ -13,21 +18,24 @@ export function useLayoutAdapt() {
   function updateCardPadding() {
     const col = fixedColRef.value
     const card = document.querySelector('.card') as HTMLElement | null
-    if (!col || !card || window.innerWidth > 768) {
+    if (!col || !card || window.innerWidth > MOBILE_BREAKPOINT) {
       if (card) card.style.paddingTop = ''
       return
     }
-    card.style.paddingTop = col.offsetHeight + 16 + 'px'
+    // 用 offsetHeight（含 border），即固定栏真实占用高度
+    card.style.paddingTop = col.offsetHeight + FIXED_COL_GAP + 'px'
   }
 
   onMounted(() => {
     resizeObserver = new ResizeObserver(updateCardPadding)
     if (fixedColRef.value) resizeObserver.observe(fixedColRef.value)
+    window.addEventListener('resize', updateCardPadding)
     updateCardPadding()
   })
 
   onUnmounted(() => {
     resizeObserver?.disconnect()
+    window.removeEventListener('resize', updateCardPadding)
   })
 
   return { fixedColRef }

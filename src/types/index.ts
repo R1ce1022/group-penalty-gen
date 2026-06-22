@@ -5,6 +5,9 @@ export interface Member {
   count: number    // 违规次数，复制结果后自动 +1
 }
 
+/** 禁言单位（与 src/data/defaults.ts 的 BanUnit 保持一致） */
+export type BanUnit = '分钟' | '小时' | '天'
+
 /** 违规项 */
 export interface Violation {
   id: number
@@ -38,7 +41,7 @@ export interface StoredData {
   nextPenaltyId: number
   nextReminderId: number
   banDuration: number
-  banUnit: string
+  banUnit: BanUnit
   darkMode: boolean
 }
 

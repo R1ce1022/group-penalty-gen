@@ -4,26 +4,23 @@
   支持勾选、添加自定义、删除、重置。
 */
 import { ref, computed, watch } from 'vue'
-import type { Penalty } from '../types'
-import { CUSTOM_ID_THRESHOLD, createDefaultPenalties } from '../data/defaults'
+import type { Penalty, BanUnit } from '../types'
+import {
+  CUSTOM_ID_THRESHOLD,
+  createDefaultPenalties,
+  DEFAULT_BAN_DURATION,
+  DEFAULT_BAN_UNIT,
+  BAN_UNIT_LIMITS,
+} from '../data/defaults'
 
 export function usePenalties() {
   const penalties = ref<Penalty[]>(createDefaultPenalties())
   const nextPenaltyId = ref(CUSTOM_ID_THRESHOLD) // 默认处罚占用 id 1-2，自定义从阈值开始
-  const banDuration = ref(30)       // 禁言时长（数值部分）
-  const banUnit = ref('分钟')        // 禁言单位：分钟 / 小时 / 天
+  const banDuration = ref(DEFAULT_BAN_DURATION) // 禁言时长（数值部分）
+  const banUnit = ref<BanUnit>(DEFAULT_BAN_UNIT) // 禁言单位：分钟 / 小时 / 天
 
   /** 根据禁言单位计算滑轨最大值 */
-  const banMax = computed(() => {
-    switch (banUnit.value) {
-      case '小时':
-        return 24
-      case '天':
-        return 30
-      default:
-        return 60
-    }
-  })
+  const banMax = computed(() => BAN_UNIT_LIMITS[banUnit.value])
 
   /** 切换单位时，如果当前时长超出新单位的上限则自动截断 */
   watch(banUnit, () => {
@@ -50,8 +47,8 @@ export function usePenalties() {
   function resetPenalties() {
     penalties.value = createDefaultPenalties()
     nextPenaltyId.value = CUSTOM_ID_THRESHOLD
-    banDuration.value = 30
-    banUnit.value = '分钟'
+    banDuration.value = DEFAULT_BAN_DURATION
+    banUnit.value = DEFAULT_BAN_UNIT
   }
 
   /** 清空所有勾选（保留条目） */

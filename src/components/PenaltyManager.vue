@@ -5,12 +5,17 @@
 -->
 <script setup lang="ts">
 import { ref, computed } from 'vue'
-import { CUSTOM_ID_THRESHOLD } from '../data/defaults'
+import type { Penalty, BanUnit } from '../types'
+import {
+  CUSTOM_ID_THRESHOLD,
+  BAN_UNITS,
+  BAN_UNIT_ABBR,
+} from '../data/defaults'
 
 const props = defineProps<{
-  penalties: { id: number; label: string; checked: boolean }[]
+  penalties: Penalty[]
   banDuration: number
-  banUnit: string
+  banUnit: BanUnit
   banMax: number
 }>()
 const emit = defineEmits<{
@@ -18,7 +23,7 @@ const emit = defineEmits<{
   add: [name: string]
   remove: [id: number]
   'update:banDuration': [v: number]
-  'update:banUnit': [v: string]
+  'update:banUnit': [v: BanUnit]
 }>()
 
 const showModal = ref(false)     // 管理弹窗显隐
@@ -84,13 +89,12 @@ function onKeydown(e: KeyboardEvent) {
         "
       />
       <span class="ban-value"
-        >{{ banDuration
-        }}{{ banUnit === '小时' ? 'h' : banUnit === '分钟' ? 'm' : 'd' }}</span
+        >{{ banDuration }}{{ BAN_UNIT_ABBR[banUnit] }}</span
       >
     </div>
     <div class="ban-unit-group">
       <button
-        v-for="u in ['分钟', '小时', '天']"
+        v-for="u in BAN_UNITS"
         :key="u"
         class="unit-btn"
         :class="{ active: banUnit === u }"

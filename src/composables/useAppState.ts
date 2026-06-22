@@ -31,6 +31,7 @@ export function useAppState() {
     selectMember,
     addMember,
     removeMember,
+    adjustMemberCount,
     clearSelection,
     resetMembers,
   } = useMembers()
@@ -135,14 +136,12 @@ export function useAppState() {
   }
 
   // ===================== 清空 / 重置 =====================
-  /** 仅清空所有勾选状态，保留数据 */
+  /** 仅清空所有勾选状态，保留数据与禁言时长设置 */
   function clearAll() {
     clearSelection()
     clearViolationChecks()
     clearPenaltyChecks()
     clearReminderSelections()
-    banDuration.value = 30
-    banUnit.value = '分钟'
     showToast('已清空勾选')
   }
 
@@ -198,6 +197,7 @@ export function useAppState() {
     selectMember,
     addMember,
     removeMember,
+    adjustMemberCount,
     toggleViolation,
     addViolation,
     removeViolation,

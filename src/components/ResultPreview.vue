@@ -10,8 +10,10 @@ const props = defineProps<{ resultText: string }>()
 const emit = defineEmits<{ copy: [] }>()
 
 const previewRef = ref<HTMLDivElement | null>(null)
-let lastPreviewHeight = 120   // 记录上次内容高度，用于动画过渡
-let isReady = false           // 跳过首次加载的动画
+// 高度过渡时长，须与 CSS .preview 的 transition: height 保持一致
+const HEIGHT_TRANSITION_MS = 250
+let lastPreviewHeight = 0   // 记录上次内容高度，用于动画过渡
+let isReady = false         // 跳过首次加载的动画
 
 /** 监听结果文本变化，通过固定高度 → 新高度的方式触发 CSS transition */
 watch(
@@ -26,8 +28,8 @@ watch(
     el.style.height = newHeight + 'px'
     lastPreviewHeight = newHeight
     setTimeout(() => {
-      el.style.height = ''        // 300ms 后释放固定高度
-    }, 300)
+      el.style.height = ''        // 过渡结束后释放固定高度
+    }, HEIGHT_TRANSITION_MS)
   },
   { flush: 'post' },
 )
@@ -54,11 +56,11 @@ onMounted(() => {
 .preview {
   position: relative;
   white-space: pre-wrap;
-  background: var(--color-cyan-white);
-  color: var(--color-text);
+  background: var(--preview-bg);
+  color: var(--preview-text);
   padding: 14px 12px 12px;
   border-radius: var(--radius-md);
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--preview-border);
   margin-top: var(--space-md);
   min-height: 120px;
   cursor: pointer;
